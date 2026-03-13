@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/opengraph-image.png',
+        url: '/share-patina.png',
         width: 1200,
         height: 630,
         alt: 'PÁTINA',
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     title: 'PÁTINA | Copas pintadas a mano',
     description:
       'Copas pintadas a mano, piezas únicas con identidad artística y terminación premium.',
-    images: ['/opengraph-image.png'],
+    images: ['/share-patina.png'],
   },
 }
 
