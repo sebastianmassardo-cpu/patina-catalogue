@@ -52,7 +52,7 @@ export default async function Home() {
 
             <div className="flex flex-wrap gap-3">
               <a
-                href="https://instagram.com/patina-vitreal"
+                href="https://instagram.com/patina.vitreal"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="rounded-full border border-[#CFC1B5] bg-white/80 px-4 py-2.5 text-sm text-[#163F2C] backdrop-blur transition hover:bg-white"
@@ -142,69 +142,67 @@ export default async function Home() {
           </div>
         ) : (
           <div className="grid gap-8 sm:grid-cols-2 xl:grid-cols-3">
-            {products.map((product: Product) => (
-              <article
-                key={product.id}
-                className="group overflow-hidden rounded-[2rem] border border-[#DED4CC] bg-white/92 shadow-[0_10px_30px_rgba(22,63,44,0.05)] transition duration-300 hover:-translate-y-1.5 hover:shadow-[0_24px_60px_rgba(22,63,44,0.09)]"
-              >
-                {product.hero_image_url ? (
-                  <div className="relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent opacity-70" />
-                    <img
-                      src={product.hero_image_url}
-                      alt={product.name}
-                      className="h-[26rem] w-full object-cover transition duration-700 group-hover:scale-[1.04]"
-                    />
-                  </div>
-                ) : (
-                  <div className="flex h-[26rem] items-center justify-center bg-[#E9E1DA] text-[#6A756F]">
-                    Sin imagen
-                  </div>
-                )}
+            {products.map((product: Product) => {
+              const whatsappMessage = `Hola, me interesa la copa ${product.name}`
+              const whatsappHref = `https://wa.me/56981447763?text=${encodeURIComponent(
+                whatsappMessage
+              )}`
 
-                <div className="p-6">
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <p className="text-[11px] uppercase tracking-[0.28em] text-[#6F7E74]">
-                        {product.collection || 'Colección'}
-                      </p>
+              return (
+                <article
+                  key={product.id}
+                  className="group overflow-hidden rounded-[2rem] border border-[#DED4CC] bg-white/92 shadow-[0_10px_30px_rgba(22,63,44,0.05)] transition duration-300 hover:-translate-y-1.5 hover:shadow-[0_24px_60px_rgba(22,63,44,0.09)]"
+                >
+                  {product.hero_image_url ? (
+                    <div className="relative overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent opacity-70" />
+                      <img
+                        src={product.hero_image_url}
+                        alt={product.name}
+                        className="h-[26rem] w-full object-cover transition duration-700 group-hover:scale-[1.04]"
+                      />
+                    </div>
+                  ) : (
+                    <div className="flex h-[26rem] items-center justify-center bg-[#E9E1DA] text-[#6A756F]">
+                      Sin imagen
+                    </div>
+                  )}
 
-                      <h2 className="mt-3 text-2xl font-semibold tracking-[-0.02em] text-[#163F2C]">
-                        {product.name}
-                      </h2>
+                  <div className="p-6">
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <p className="text-[11px] uppercase tracking-[0.28em] text-[#6F7E74]">
+                          {product.collection || 'Colección'}
+                        </p>
+
+                        <h2 className="mt-3 text-2xl font-semibold tracking-[-0.02em] text-[#163F2C]">
+                          {product.name}
+                        </h2>
+                      </div>
+
+                      <div className="rounded-full border border-[#D8CCC2] bg-[#F8F2EC] px-3 py-1 text-sm font-medium text-[#163F2C]">
+                        ${product.price_clp?.toLocaleString('es-CL')}
+                      </div>
                     </div>
 
-                    <div className="rounded-full border border-[#D8CCC2] bg-[#F8F2EC] px-3 py-1 text-sm font-medium text-[#163F2C]">
-                      ${product.price_clp?.toLocaleString('es-CL')}
+                    <p className="mt-4 text-sm leading-7 text-[#5E6C64]">
+                      {product.description || 'Copa única pintada a mano.'}
+                    </p>
+
+                    <div className="mt-6 flex flex-wrap gap-3">
+                      <a
+                        href={whatsappHref}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="rounded-full border border-[#D1C4B9] px-4 py-2.5 text-sm text-[#163F2C] transition hover:bg-[#F7F2ED]"
+                      >
+                        Consultar esta copa
+                      </a>
                     </div>
                   </div>
-
-                  <p className="mt-4 text-sm leading-7 text-[#5E6C64]">
-                    {product.description || 'Copa única pintada a mano.'}
-                  </p>
-
-                  <div className="mt-6 flex flex-wrap gap-3">
-                    <a
-                      href="https://instagram.com/patina-vitreal"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="rounded-full bg-[#163F2C] px-4 py-2.5 text-sm text-white transition hover:opacity-90"
-                    >
-                      Reservar por Instagram
-                    </a>
-
-                    <a
-                      href="https://wa.me/56981447763"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="rounded-full border border-[#D1C4B9] px-4 py-2.5 text-sm text-[#163F2C] transition hover:bg-[#F7F2ED]"
-                    >
-                      Consultar
-                    </a>
-                  </div>
-                </div>
-              </article>
-            ))}
+                </article>
+              )
+            })}
           </div>
         )}
       </section>
