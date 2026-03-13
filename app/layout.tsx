@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     title: 'PÁTINA | Copas pintadas a mano',
     description:
       'Copas pintadas a mano, piezas únicas con identidad artística y terminación premium.',
-    images: ['/twitter-image.png'],
+    images: ['/opengraph-image.png'],
   },
 }
 
