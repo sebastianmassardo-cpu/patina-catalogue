@@ -6,6 +6,11 @@ export const metadata: Metadata = {
   description:
     'Copas pintadas a mano, piezas únicas con identidad artística y terminación premium.',
   metadataBase: new URL('https://patinavitreal.cl'),
+  icons: {
+    icon: '/icon.png',
+    apple: '/apple-icon.png',
+    shortcut: '/favicon.ico',
+  },
   openGraph: {
     title: 'PÁTINA | Copas pintadas a mano',
     description:
