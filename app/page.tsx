@@ -1,18 +1,6 @@
 export const dynamic = 'force-dynamic'
+import { CatalogueBrowser } from './_components/catalogue-browser'
 import { supabase } from '../lib/supabase'
-
-type Product = {
-  id: string
-  name: string
-  slug: string
-  price_clp: number
-  status: string
-  collection: string | null
-  description: string | null
-  hero_image_url: string | null
-  created_at?: string
-  sort_order?: number
-}
 
 export default async function Home() {
   const { data: products, error } = await supabase
@@ -24,39 +12,54 @@ export default async function Home() {
 
   if (error) {
     return (
-      <main className="min-h-screen bg-[#F4EFEB] px-6 py-12 text-[#163F2C]">
-        <div className="mx-auto max-w-5xl rounded-[2rem] border border-[#D9D0C8] bg-white/70 p-8 shadow-sm">
-          <h1 className="text-2xl font-semibold">Error cargando catálogo</h1>
-          <p className="mt-4 text-red-700">{error.message}</p>
+      <main className="min-h-screen bg-[#F7F4F0] px-6 py-12 text-[#163F2C] md:px-10 md:py-16">
+        <div className="mx-auto max-w-3xl border-t border-[#DDD2C8] pt-8">
+          <h1 className="font-serif text-2xl tracking-[-0.03em]">
+            Error cargando catálogo
+          </h1>
+          <p className="mt-4 text-sm leading-7 text-red-700">{error.message}</p>
         </div>
       </main>
     )
   }
 
   return (
-    <main className="min-h-screen bg-[#F4EFEB] text-[#163F2C]">
-      <section className="relative overflow-hidden border-b border-[#DDD3CB]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(22,63,44,0.05),_transparent_32%),radial-gradient(circle_at_bottom_right,_rgba(120,94,67,0.08),_transparent_28%),linear-gradient(to_bottom,_#F7F2EE,_#F2ECE7)]" />
-        <div className="absolute -left-20 top-10 h-72 w-72 rounded-full bg-[#D8CDC3]/40 blur-3xl" />
-        <div className="absolute right-0 top-0 h-72 w-72 rounded-full bg-[#163F2C]/[0.05] blur-3xl" />
+    <main className="min-h-screen bg-[#F7F4F0] text-[#163F2C]">
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-x-0 top-0 h-[18rem] bg-[linear-gradient(to_bottom,rgba(255,255,255,0.72),rgba(247,244,240,0))]" />
+        <div className="absolute left-[-7rem] top-[-2rem] h-52 w-52 rounded-full bg-[#E8DED6]/65 blur-3xl" />
+        <div className="absolute right-[-4rem] top-8 h-60 w-60 rounded-full bg-[#D9E1DA]/35 blur-3xl" />
 
-        <div className="relative mx-auto max-w-7xl px-6 py-8 md:px-10 md:py-10">
-          <header className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-            <div className="flex items-center gap-4">
+        <div className="relative mx-auto max-w-7xl px-6 pb-5 pt-4 md:px-10 md:pb-8 md:pt-5">
+          <header className="flex items-center justify-between gap-4 border-b border-[#E4DCD4] pb-4 md:pb-5">
+            <div className="flex shrink-0 flex-col items-start gap-1.5">
               <img
                 src="/logo-patina.png"
                 alt="PÁTINA"
                 className="h-12 w-auto object-contain md:h-14"
               />
+              <div className="h-px w-16 bg-[#DDD2C8] md:w-20" />
             </div>
 
-            <div className="flex flex-wrap gap-3">
+            <div className="flex max-w-[13rem] flex-wrap justify-end gap-1.5 md:max-w-none">
               <a
                 href="https://instagram.com/patina.vitreal"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-full border border-[#CFC1B5] bg-white/80 px-4 py-2.5 text-sm text-[#163F2C] backdrop-blur transition hover:bg-white"
+                className="inline-flex items-center gap-2 rounded-full border border-[#D8CEC6] bg-white/45 px-3.5 py-1.5 text-[9px] uppercase tracking-[0.2em] text-[#4B5C53] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:bg-white/75 hover:text-[#163F2C]"
               >
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  className="h-3 w-3"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                >
+                  <rect x="3.75" y="3.75" width="16.5" height="16.5" rx="4.5" />
+                  <circle cx="12" cy="12" r="4.1" />
+                  <circle cx="17.4" cy="6.7" r="0.85" fill="currentColor" stroke="none" />
+                </svg>
                 Instagram
               </a>
 
@@ -64,148 +67,64 @@ export default async function Home() {
                 href="https://wa.me/56981447763"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-full bg-[#163F2C] px-4 py-2.5 text-sm text-white shadow-sm transition hover:opacity-90"
+                className="inline-flex items-center gap-2 rounded-full border border-[#CBD6CE] bg-white/35 px-3.5 py-1.5 text-[9px] uppercase tracking-[0.2em] text-[#4B5C53] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:bg-white/75 hover:text-[#163F2C]"
               >
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  className="h-3 w-3"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M20.1 11.5c0 4.5-3.7 8.1-8.3 8.1a8.7 8.7 0 0 1-4-.9l-3.9 1 1.1-3.7a7.9 7.9 0 0 1-1.4-4.5c0-4.5 3.7-8.1 8.3-8.1s8.2 3.6 8.2 8.1Z" />
+                  <path d="M9.3 8.7c.2-.4.5-.4.7-.4h.6c.2 0 .4.1.5.4l.8 2.1c.1.2.1.5-.1.7l-.6.8c-.1.1-.1.3 0 .4.4.8 1 1.5 1.8 2 .1.1.3.1.5 0l1-.6c.2-.1.4-.1.6 0l2 .9c.2.1.3.3.3.5v.5c0 .2-.1.5-.4.6l-1.3.6c-.4.2-.9.2-1.3.1-1.1-.3-2.1-.8-3-1.5a10 10 0 0 1-2.5-2.8 6.5 6.5 0 0 1-.9-3.1c0-.4.1-.8.3-1.1l1-1.1Z" />
+                </svg>
                 WhatsApp
               </a>
             </div>
           </header>
 
-          <div className="mt-14 grid gap-10 md:mt-20 md:grid-cols-[1.18fr_0.82fr] md:items-end">
-            <div>
-              <p className="text-xs uppercase tracking-[0.38em] text-[#6B7A70]">
-                Colección disponible
+          <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:items-center lg:gap-10">
+            <div className="max-w-xl">
+              <p className="text-[10px] uppercase tracking-[0.34em] text-[#7A857E]">
+                Catálogo disponible
               </p>
 
-              <h1 className="mt-5 max-w-4xl text-5xl font-semibold leading-[1.03] tracking-[-0.04em] text-[#163F2C] md:text-7xl">
-                Copas pintadas a mano con presencia, carácter y delicadeza.
+              <h1 className="mt-3 max-w-2xl font-serif text-[2.1rem] leading-[1.06] tracking-[-0.045em] text-[#163F2C] md:text-[2.85rem] lg:text-[3.25rem]">
+                Copas pintadas a mano
               </h1>
 
-              <p className="mt-6 max-w-2xl text-lg leading-8 text-[#55635B] md:text-xl">
-                Cada pieza es única y está pensada para transformar un objeto cotidiano
-                en algo especial, coleccionable y memorable.
+              <p className="mt-4 max-w-md text-[14px] leading-6 text-[#5C6962] md:text-[15px] md:leading-7">
+                Piezas únicas para regalar, coleccionar y habitar la mesa.
               </p>
 
-              <div className="mt-8 flex flex-wrap gap-3">
-                <a
-                  href="https://instagram.com/patina-vitreal"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="rounded-full bg-[#163F2C] px-6 py-3 text-sm text-white shadow-sm transition hover:opacity-90"
-                >
-                  Ver Instagram
-                </a>
-
+              <div className="mt-5">
                 <a
                   href="https://wa.me/56981447763"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-full border border-[#CDBFB3] bg-white/75 px-6 py-3 text-sm text-[#163F2C] backdrop-blur transition hover:bg-white"
+                  className="inline-flex rounded-full border border-[#163F2C] px-3.5 py-1.5 text-[9px] uppercase tracking-[0.18em] text-[#163F2C] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:bg-[#163F2C] hover:text-white md:text-[10px]"
                 >
                   Consultar por WhatsApp
                 </a>
               </div>
             </div>
 
-            <div className="rounded-[2rem] border border-white/70 bg-white/65 p-8 shadow-[0_20px_60px_rgba(22,63,44,0.08)] backdrop-blur">
-              <p className="text-xs uppercase tracking-[0.3em] text-[#7B8A80]">
-                Disponibles
-              </p>
-
-              <div className="mt-4 flex items-end gap-3">
-                <p className="text-6xl font-semibold tracking-[-0.05em] text-[#163F2C]">
-                  {products?.length ?? 0}
-                </p>
-                <p className="pb-2 text-sm text-[#68756E]">
-                  piezas en catálogo
-                </p>
-              </div>
-
-              <div className="mt-8 h-px bg-gradient-to-r from-transparent via-[#D5CBC2] to-transparent" />
-
-              <p className="mt-8 text-sm leading-7 text-[#5E6C64]">
-                Una selección curada de piezas listas para regalar, coleccionar
-                o incorporar a una mesa con identidad propia.
-              </p>
+            <div className="relative overflow-hidden rounded-[2rem] border border-[#E5DDD6] bg-[#ECE3DB] shadow-[0_18px_48px_rgba(22,63,44,0.08)]">
+              <img
+                src="/hero-patina.jpg"
+                alt="Copas pintadas a mano de PÁTINA"
+                className="h-[19rem] w-full object-cover md:h-[24rem] lg:h-[28rem]"
+              />
             </div>
           </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-12 md:px-10 md:py-20">
-        {!products || products.length === 0 ? (
-          <div className="rounded-[2rem] border border-[#DDD3CB] bg-white/80 p-10 shadow-sm">
-            <p className="text-lg font-medium">No hay copas disponibles por ahora.</p>
-            <p className="mt-2 text-[#5E6C64]">
-              Vuelve pronto para ver nuevas piezas.
-            </p>
-          </div>
-        ) : (
-          <div className="grid gap-8 sm:grid-cols-2 xl:grid-cols-3">
-            {products.map((product: Product) => {
-              const whatsappMessage = `Hola, me interesa la copa ${product.name}`
-              const whatsappHref = `https://wa.me/56981447763?text=${encodeURIComponent(
-                whatsappMessage
-              )}`
-
-              return (
-                <article
-                  key={product.id}
-                  className="group overflow-hidden rounded-[2rem] border border-[#DED4CC] bg-white/92 shadow-[0_10px_30px_rgba(22,63,44,0.05)] transition duration-300 hover:-translate-y-1.5 hover:shadow-[0_24px_60px_rgba(22,63,44,0.09)]"
-                >
-                  {product.hero_image_url ? (
-                    <div className="relative overflow-hidden">
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent opacity-70" />
-                      <img
-                        src={product.hero_image_url}
-                        alt={product.name}
-                        className="h-[26rem] w-full object-cover transition duration-700 group-hover:scale-[1.04]"
-                      />
-                    </div>
-                  ) : (
-                    <div className="flex h-[26rem] items-center justify-center bg-[#E9E1DA] text-[#6A756F]">
-                      Sin imagen
-                    </div>
-                  )}
-
-                  <div className="p-6">
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <p className="text-[11px] uppercase tracking-[0.28em] text-[#6F7E74]">
-                          {product.collection || 'Colección'}
-                        </p>
-
-                        <h2 className="mt-3 text-2xl font-semibold tracking-[-0.02em] text-[#163F2C]">
-                          {product.name}
-                        </h2>
-                      </div>
-
-                      <div className="rounded-full border border-[#D8CCC2] bg-[#F8F2EC] px-3 py-1 text-sm font-medium text-[#163F2C]">
-                        ${product.price_clp?.toLocaleString('es-CL')}
-                      </div>
-                    </div>
-
-                    <p className="mt-4 text-sm leading-7 text-[#5E6C64]">
-                      {product.description || 'Copa única pintada a mano.'}
-                    </p>
-
-                    <div className="mt-6 flex flex-wrap gap-3">
-                      <a
-                        href={whatsappHref}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="rounded-full border border-[#D1C4B9] px-4 py-2.5 text-sm text-[#163F2C] transition hover:bg-[#F7F2ED]"
-                      >
-                        Consultar esta copa
-                      </a>
-                    </div>
-                  </div>
-                </article>
-              )
-            })}
-          </div>
-        )}
-      </section>
+      <CatalogueBrowser products={products ?? []} />
     </main>
   )
 }
