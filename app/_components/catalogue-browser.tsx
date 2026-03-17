@@ -6,6 +6,7 @@ import {
   formatClpPrice,
   getProductPricing,
   isPackOnlyProduct,
+  type PricingLookup,
 } from '../pricing-config'
 
 const ALL_COLLECTIONS_ID = '__all__'
@@ -13,6 +14,7 @@ const ALL_COLLECTIONS_LABEL = 'Todas'
 
 type CatalogueBrowserProps = {
   products: Product[]
+  pricingByKey: PricingLookup
 }
 
 type CollectionChipProps = {
@@ -38,9 +40,16 @@ function CollectionChip({ isActive, label, onClick }: CollectionChipProps) {
   )
 }
 
-function ProductCard({ product }: { product: Product }) {
-  const pricing = getProductPricing(product)
-  const displayPrice = pricing?.unit ?? product.price_clp
+function ProductCard({
+  pricingByKey,
+  product,
+}: {
+  pricingByKey: PricingLookup
+  product: Product
+}) {
+  const pricing = getProductPricing(product, pricingByKey)
+  const displayPrice = pricing?.price_1 ?? product.price_clp
+  const hasPackPricing = Boolean(pricing?.price_2 || pricing?.price_4)
   const whatsappMessage = `Hola, me interesa la copa ${product.name}`
   const whatsappHref = `https://wa.me/56981447763?text=${encodeURIComponent(
     whatsappMessage
@@ -54,48 +63,47 @@ function ProductCard({ product }: { product: Product }) {
           <img
             src={product.hero_image_url}
             alt={product.name}
-            className="h-[31rem] w-full object-cover transition-transform duration-350 ease-out group-hover:scale-[1.03] md:h-[33rem]"
+            className="h-[24.75rem] w-full object-cover transition-transform duration-350 ease-out group-hover:scale-[1.03] md:h-[26.5rem]"
           />
         </div>
       ) : (
-        <div className="flex h-[31rem] items-center justify-center rounded-[1.75rem] bg-[#E9E1DA] text-[#6A756F] transition-shadow duration-300 ease-out group-hover:shadow-[0_18px_40px_rgba(22,63,44,0.08)] md:h-[33rem]">
+        <div className="flex h-[24.75rem] items-center justify-center rounded-[1.75rem] bg-[#E9E1DA] text-[#6A756F] transition-shadow duration-300 ease-out group-hover:shadow-[0_18px_40px_rgba(22,63,44,0.08)] md:h-[26.5rem]">
           Sin imagen
         </div>
       )}
 
-      <div className="mt-5 flex items-start justify-between gap-4">
+      <div className="mt-4.5 flex items-start justify-between gap-4">
         <div className="min-w-0">
           <p className="text-[9px] uppercase tracking-[0.4em] text-[#8A948E]">
             {product.collection?.trim() || 'Colección'}
           </p>
 
-          <h2 className="mt-2.5 font-serif text-[1.55rem] leading-[1.18] tracking-[-0.035em] text-[#163F2C]">
+          <h2 className="mt-2 font-serif text-[1.5rem] leading-[1.18] tracking-[-0.035em] text-[#163F2C]">
             {product.name}
           </h2>
         </div>
 
-        <p className="shrink-0 pt-1 font-serif text-[0.95rem] tracking-[0.02em] text-[#6E7872]">
-          {formatClpPrice(displayPrice)}
-        </p>
+        <div className="shrink-0 pt-1 text-right">
+          <p className="text-[8px] uppercase tracking-[0.32em] text-[#909994]">
+            Pieza
+          </p>
+          <p className="mt-1 font-serif text-[1.05rem] tracking-[0.03em] text-[#4E5E56] md:text-[1.12rem]">
+            {formatClpPrice(displayPrice)}
+          </p>
+        </div>
       </div>
 
-      <p className="mt-3.5 max-w-[32rem] text-[13px] leading-7 text-[#647069]">
+      <p className="mt-3 max-w-[32rem] text-[13px] leading-6 text-[#647069]">
         {product.description || 'Copa única pintada a mano.'}
       </p>
 
-      {pricing ? (
-        <div className="mt-4 border-t border-[#E6DED6] pt-3">
-          <p className="text-[9px] uppercase tracking-[0.34em] text-[#8E9791]">
-            Pack ahorro
-          </p>
-          <div className="mt-2 space-y-1 text-[12px] leading-6 text-[#6B756F]">
-            <p>2 copas {formatClpPrice(pricing.pack2)}</p>
-            <p>4 copas {formatClpPrice(pricing.pack4)}</p>
-          </div>
-        </div>
+      {hasPackPricing ? (
+        <p className="mt-3.5 text-[10px] uppercase tracking-[0.2em] text-[#87918C]">
+          Disponible en packs
+        </p>
       ) : null}
 
-      <div className="mt-4.5">
+      <div className="mt-4">
         <a
           href={whatsappHref}
           target="_blank"
@@ -109,7 +117,7 @@ function ProductCard({ product }: { product: Product }) {
   )
 }
 
-export function CatalogueBrowser({ products }: CatalogueBrowserProps) {
+export function CatalogueBrowser({ pricingByKey, products }: CatalogueBrowserProps) {
   const catalogueProducts = products.filter((product) => !isPackOnlyProduct(product))
 
   const collectionValues = catalogueProducts
@@ -197,9 +205,9 @@ export function CatalogueBrowser({ products }: CatalogueBrowserProps) {
             </p>
           </div>
 
-          <div className="grid gap-x-8 gap-y-14 md:grid-cols-2 2xl:grid-cols-3">
+          <div className="grid gap-x-8 gap-y-12 md:grid-cols-2 lg:gap-y-[3.25rem] 2xl:grid-cols-3">
             {visibleProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard key={product.id} pricingByKey={pricingByKey} product={product} />
             ))}
           </div>
         </>

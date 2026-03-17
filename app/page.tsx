@@ -1,5 +1,13 @@
 export const dynamic = 'force-dynamic'
 import { CatalogueBrowser } from './_components/catalogue-browser'
+import { PricingSummary } from './_components/pricing-summary'
+import type { PricingRow } from './catalogue-types'
+import {
+  buildPricingLookup,
+  buildPricingSummaryGroups,
+  isPackOnlyProduct,
+  type PricingLookup,
+} from './pricing-config'
 import { supabase } from '../lib/supabase'
 
 export default async function Home() {
@@ -9,6 +17,35 @@ export default async function Home() {
     .eq('status', 'Disponible')
     .order('sort_order', { ascending: true })
     .order('created_at', { ascending: false })
+
+  const availableProducts = products ?? []
+  const catalogueProducts = availableProducts.filter((product) => !isPackOnlyProduct(product))
+  const pricingKeys = Array.from(
+    new Set(
+      catalogueProducts
+        .map((product) => product.price_key?.trim())
+        .filter((priceKey): priceKey is string => Boolean(priceKey))
+    )
+  )
+
+  let pricingByKey: PricingLookup = {}
+  let pricingRows: PricingRow[] = []
+
+  if (pricingKeys.length > 0) {
+    const { data: pricingData, error: pricingError } = await supabase
+      .from('pricing')
+      .select('id, price_key, price_1, price_2, price_4, created_at')
+      .in('price_key', pricingKeys)
+
+    if (pricingError) {
+      console.error('Error loading pricing', pricingError.message)
+    } else {
+      pricingRows = pricingData ?? []
+      pricingByKey = buildPricingLookup(pricingRows ?? [])
+    }
+  }
+
+  const pricingSummaryGroups = buildPricingSummaryGroups(pricingRows, catalogueProducts)
 
   if (error) {
     return (
@@ -115,7 +152,7 @@ export default async function Home() {
 
             <div className="relative overflow-hidden rounded-[2rem] border border-[#E5DDD6] bg-[#ECE3DB] shadow-[0_18px_48px_rgba(22,63,44,0.08)]">
               <img
-                src="/hero-patina.jpg"
+                src="/hero-patina.png"
                 alt="Copas pintadas a mano de PÁTINA"
                 className="h-[19rem] w-full object-cover md:h-[24rem] lg:h-[28rem]"
               />
@@ -124,7 +161,8 @@ export default async function Home() {
         </div>
       </section>
 
-      <CatalogueBrowser products={products ?? []} />
+      <CatalogueBrowser pricingByKey={pricingByKey} products={availableProducts} />
+      <PricingSummary groups={pricingSummaryGroups} />
     </main>
   )
 }

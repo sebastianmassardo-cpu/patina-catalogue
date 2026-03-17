@@ -11,3 +11,12 @@ export type Product = {
   created_at?: string
   sort_order?: number
 }
+
+export type PricingRow = {
+  id: string
+  price_key: string | null
+  price_1: number | null
+  price_2: number | null
+  price_4: number | null
+  created_at?: string | null
+}
