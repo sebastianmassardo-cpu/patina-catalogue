@@ -17,27 +17,27 @@ export function PricingSummary({ groups }: PricingSummaryProps) {
 
   return (
     <section className="mx-auto max-w-7xl px-6 pb-16 pt-8 md:px-10 md:pb-24 md:pt-10">
-      <div className="relative overflow-hidden rounded-[2.25rem] border border-[#E6DDD5] bg-[linear-gradient(180deg,rgba(255,255,255,0.7),rgba(247,244,240,0.97))] px-6 py-7 shadow-[0_24px_60px_rgba(22,63,44,0.05)] md:px-8 md:py-9">
-        <div className="absolute left-[-2rem] top-[-2rem] h-28 w-28 rounded-full bg-[#E8DED6]/50 blur-3xl" />
-        <div className="absolute right-[-2rem] top-6 h-32 w-32 rounded-full bg-[#DCE5DE]/45 blur-3xl" />
+      <div className="relative overflow-hidden rounded-[2.4rem] bg-[linear-gradient(180deg,rgba(255,255,255,0.68),rgba(247,244,240,0.97))] px-6 py-8 shadow-[0_24px_60px_rgba(22,63,44,0.05)] md:px-8 md:py-10">
+        <div className="absolute left-[-2rem] top-[-2rem] h-28 w-28 rounded-full bg-[#E8DED6]/45 blur-3xl" />
+        <div className="absolute right-[-2rem] top-8 h-32 w-32 rounded-full bg-[#DCE5DE]/40 blur-3xl" />
 
         <div className="relative">
-          <div className="flex flex-col gap-5 border-b border-[#E7DED6] pb-6 lg:flex-row lg:items-end lg:justify-between">
+          <div className="grid gap-5 border-b border-[#E8DED6] pb-7 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-end">
             <div className="max-w-2xl">
               <p className="text-[10px] uppercase tracking-[0.32em] text-[#7A857E]">
                 Precios por formato
               </p>
-              <h2 className="mt-3 max-w-xl font-serif text-[1.55rem] leading-[1.12] tracking-[-0.03em] text-[#163F2C] md:text-[1.95rem]">
+              <h2 className="mt-3 max-w-xl font-serif text-[1.6rem] leading-[1.12] tracking-[-0.03em] text-[#163F2C] md:text-[2.02rem]">
                 Una guia serena para elegir formatos y combinaciones.
               </h2>
             </div>
 
-            <p className="max-w-sm text-[12px] leading-6 text-[#738078] lg:text-right">
+            <p className="max-w-xs text-[11px] leading-6 text-[#77827C] lg:justify-self-end lg:text-right">
               Puedes combinar disenos dentro de un mismo grupo de precio.
             </p>
           </div>
 
-          <div className="mt-7 grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
+          <div className="mt-8 grid gap-5 lg:grid-cols-2 xl:grid-cols-3">
             {groups.map((group) => {
               const priceRows = PRICE_LABELS.reduce<
                 Array<{
@@ -64,42 +64,39 @@ export function PricingSummary({ groups }: PricingSummaryProps) {
               return (
                 <article
                   key={group.id}
-                  className="rounded-[1.8rem] border border-[#E7DED6] bg-[#FCFAF7]/92 p-5 shadow-[0_16px_34px_rgba(22,63,44,0.04)] md:p-6"
+                  className="rounded-[1.9rem] bg-[linear-gradient(180deg,rgba(255,255,255,0.42),rgba(255,255,255,0.18))] px-5 py-5 ring-1 ring-[#ECE2D9]/70 backdrop-blur-[1px] md:px-6 md:py-6"
                 >
                   <div>
-                    <p className="text-[8px] uppercase tracking-[0.3em] text-[#8A948E]">
+                    <p className="text-[8px] uppercase tracking-[0.28em] text-[#8D9690]">
                       Grupo de precio
                     </p>
-                    <h3 className="mt-2 font-serif text-[1.22rem] leading-none tracking-[-0.025em] text-[#163F2C]">
+                    <h3 className="mt-2 font-serif text-[1.34rem] leading-none tracking-[-0.03em] text-[#163F2C]">
                       {group.label}
                     </h3>
                   </div>
 
-                  <div className="mt-5 grid grid-cols-3 gap-2.5">
+                  <div className="mt-5 grid grid-cols-3 gap-3 border-y border-[#EBE2DA] py-4">
                     {priceRows.map((priceRow) => (
-                      <div
-                        key={priceRow.key}
-                        className="rounded-[1.1rem] border border-[#EEE6DF] bg-white/80 px-2.5 py-3 md:px-3"
-                      >
-                        <p className="text-[7px] uppercase tracking-[0.18em] text-[#7A857E]">
+                      <div key={priceRow.key} className="min-w-0">
+                        <p className="text-[7px] uppercase tracking-[0.18em] text-[#7A847E]">
                           {priceRow.label}
                         </p>
-                        <p className="mt-2 font-serif text-[0.9rem] leading-none tracking-[0.01em] text-[#415249] md:text-[1rem]">
+                        <p className="mt-2 font-serif text-[0.96rem] leading-none tracking-[0.02em] text-[#30463B] md:text-[1.08rem]">
                           {formatClpPrice(priceRow.value)}
                         </p>
                       </div>
                     ))}
                   </div>
 
-                  <div className="mt-5 border-t border-[#ECE3DB] pt-4">
-                    <p className="text-[8px] uppercase tracking-[0.3em] text-[#8E9791]">
+                  <div className="mt-4">
+                    <p className="text-[8px] uppercase tracking-[0.28em] text-[#8E9791]">
                       Colecciones
                     </p>
                     <div className="mt-3 flex flex-wrap gap-2">
                       {group.collectionLabels.map((collectionLabel) => (
                         <span
                           key={collectionLabel}
-                          className="rounded-full bg-[#F3EEE7] px-3 py-1.5 text-[10.5px] tracking-[0.02em] text-[#5F6C65]"
+                          className="rounded-full border border-[#E9E0D8] bg-white/35 px-3 py-1.5 text-[10.5px] tracking-[0.02em] text-[#5C6962]"
                         >
                           {collectionLabel}
                         </span>

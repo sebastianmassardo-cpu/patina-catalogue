@@ -29,10 +29,10 @@ function CollectionChip({ isActive, label, onClick }: CollectionChipProps) {
       type="button"
       onClick={onClick}
       aria-pressed={isActive}
-      className={`inline-flex items-center rounded-full border px-4 py-2 text-[10px] uppercase tracking-[0.22em] transition-all duration-300 ease-out ${
+      className={`inline-flex items-center rounded-full border px-3.5 py-1.5 text-[9px] uppercase tracking-[0.22em] transition-all duration-300 ease-out ${
         isActive
-          ? 'border-[#A8B6AD] bg-[#EEF2EC] text-[#163F2C] shadow-[0_10px_24px_rgba(22,63,44,0.08)]'
-          : 'border-[#D8CEC6] bg-white/55 text-[#5B6961] hover:-translate-y-0.5 hover:border-[#C6D1C9] hover:bg-white hover:text-[#163F2C]'
+          ? 'border-[#B9C6BE] bg-[#F1F5F0] text-[#163F2C] shadow-[0_10px_20px_rgba(22,63,44,0.05)]'
+          : 'border-[#E5DBD2] bg-white/24 text-[#738078] hover:-translate-y-0.5 hover:border-[#D4CAC1] hover:bg-white/52 hover:text-[#44544B]'
       }`}
     >
       {label}
@@ -108,7 +108,7 @@ function ProductCard({
           href={whatsappHref}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex rounded-full border border-[#D6CBC1] px-3.5 py-1.5 text-[10px] uppercase tracking-[0.2em] text-[#163F2C] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:border-[#C8BCB1] hover:bg-white"
+          className="inline-flex rounded-full border border-[#D8CEC4] bg-white/24 px-3.5 py-1.5 text-[10px] uppercase tracking-[0.2em] text-[#163F2C] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:border-[#C9BEB3] hover:bg-white/62 hover:text-[#133625]"
         >
           Consultar esta copa
         </a>

@@ -1,5 +1,10 @@
 export const dynamic = 'force-dynamic'
 import { CatalogueBrowser } from './_components/catalogue-browser'
+import {
+  ContextEditorialSection,
+  DetailEditorialSection,
+  ProcessEditorialSection,
+} from './_components/editorial-sections'
 import { PricingSummary } from './_components/pricing-summary'
 import type { PricingRow } from './catalogue-types'
 import {
@@ -83,7 +88,7 @@ export default async function Home() {
                 href="https://instagram.com/patina.vitreal"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-[#D8CEC6] bg-white/45 px-3.5 py-1.5 text-[9px] uppercase tracking-[0.2em] text-[#4B5C53] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:bg-white/75 hover:text-[#163F2C]"
+                className="inline-flex items-center gap-2 rounded-full border border-[#DED4CB] bg-white/28 px-3.5 py-1.5 text-[8.5px] uppercase tracking-[0.22em] text-[#5A6960] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:border-[#D2C7BD] hover:bg-white/55 hover:text-[#163F2C]"
               >
                 <svg
                   aria-hidden="true"
@@ -104,7 +109,7 @@ export default async function Home() {
                 href="https://wa.me/56981447763"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-[#CBD6CE] bg-white/35 px-3.5 py-1.5 text-[9px] uppercase tracking-[0.2em] text-[#4B5C53] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:bg-white/75 hover:text-[#163F2C]"
+                className="inline-flex items-center gap-2 rounded-full border border-[#CFD8D1] bg-white/32 px-3.5 py-1.5 text-[8.5px] uppercase tracking-[0.22em] text-[#4F5F56] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:border-[#C4CEC8] hover:bg-white/58 hover:text-[#163F2C]"
               >
                 <svg
                   aria-hidden="true"
@@ -143,7 +148,7 @@ export default async function Home() {
                   href="https://wa.me/56981447763"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex rounded-full border border-[#163F2C] px-3.5 py-1.5 text-[9px] uppercase tracking-[0.18em] text-[#163F2C] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:bg-[#163F2C] hover:text-white md:text-[10px]"
+                  className="inline-flex items-center rounded-full border border-[#163F2C] bg-[#163F2C] px-4 py-2 text-[9px] uppercase tracking-[0.2em] text-[#F7F4F0] shadow-[0_12px_28px_rgba(22,63,44,0.09)] transition-all duration-300 ease-out hover:-translate-y-0.5 hover:bg-[#1B4A34] hover:shadow-[0_16px_32px_rgba(22,63,44,0.12)] md:text-[10px]"
                 >
                   Consultar por WhatsApp
                 </a>
@@ -161,7 +166,26 @@ export default async function Home() {
         </div>
       </section>
 
+      <section className="mx-auto max-w-7xl px-6 py-8 md:px-10 md:py-12">
+        <div className="relative overflow-hidden rounded-[2.25rem] border border-[#E8DED6]/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.62),rgba(247,244,240,0.94))] px-6 py-12 md:px-8 md:py-14">
+          <div className="absolute left-[-2rem] top-0 h-24 w-24 rounded-full bg-[#E8DED6]/45 blur-3xl" />
+          <div className="absolute right-[-2rem] bottom-0 h-28 w-28 rounded-full bg-[#D9E1DA]/35 blur-3xl" />
+
+          <div className="relative mx-auto max-w-2xl text-center">
+            <p className="font-serif text-[1.65rem] leading-[1.18] tracking-[-0.035em] text-[#163F2C] md:text-[2.05rem]">
+              No existen dos gestos iguales.
+            </p>
+            <p className="mt-4 text-[13px] leading-7 text-[#66736C] md:text-[14px]">
+              Cada copa conserva una huella leve, irrepetible, sobre el vidrio.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <ContextEditorialSection />
       <CatalogueBrowser pricingByKey={pricingByKey} products={availableProducts} />
+      <DetailEditorialSection />
+      <ProcessEditorialSection />
       <PricingSummary groups={pricingSummaryGroups} />
     </main>
   )
