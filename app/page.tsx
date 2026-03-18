@@ -173,10 +173,10 @@ export default async function Home() {
 
           <div className="relative mx-auto max-w-2xl text-center">
             <p className="font-serif text-[1.65rem] leading-[1.18] tracking-[-0.035em] text-[#163F2C] md:text-[2.05rem]">
-              No existen dos gestos iguales.
+              El arte de lo irrepetible
             </p>
             <p className="mt-4 text-[13px] leading-7 text-[#66736C] md:text-[14px]">
-              Cada copa conserva una huella leve, irrepetible, sobre el vidrio.
+              Cada copa conserva la huella sutil de un gesto hecho a mano.
             </p>
           </div>
         </div>

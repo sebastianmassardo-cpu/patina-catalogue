@@ -58,16 +58,18 @@ function ProductCard({
   return (
     <article className="group transition-transform duration-300 ease-out hover:-translate-y-1">
       {product.hero_image_url ? (
-        <div className="relative overflow-hidden rounded-[1.75rem] bg-[#E9E1DA] transition-shadow duration-300 ease-out group-hover:shadow-[0_18px_40px_rgba(22,63,44,0.08)]">
-          <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent opacity-45 transition-opacity duration-300 ease-out group-hover:opacity-35" />
-          <img
-            src={product.hero_image_url}
-            alt={product.name}
-            className="h-[24.75rem] w-full object-cover transition-transform duration-350 ease-out group-hover:scale-[1.03] md:h-[26.5rem]"
-          />
+        <div className="relative h-[24.75rem] overflow-hidden rounded-[1.75rem] bg-[#FBF9F6] transition-shadow duration-300 ease-out group-hover:shadow-[0_18px_40px_rgba(22,63,44,0.08)] md:h-[27.25rem]">
+          <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent opacity-45 transition-opacity duration-300 ease-out group-hover:opacity-35 md:opacity-22 md:group-hover:opacity-16" />
+          <div className="flex h-full items-center justify-center md:px-0 md:pb-0 md:pt-1">
+            <img
+              src={product.hero_image_url}
+              alt={product.name}
+              className="h-full w-full object-cover object-center transition-transform duration-350 ease-out group-hover:scale-[1.03] md:h-[125%] md:w-[125%] md:max-w-none md:object-contain md:object-[center_89%] md:group-hover:scale-[1.012]"
+            />
+          </div>
         </div>
       ) : (
-        <div className="flex h-[24.75rem] items-center justify-center rounded-[1.75rem] bg-[#E9E1DA] text-[#6A756F] transition-shadow duration-300 ease-out group-hover:shadow-[0_18px_40px_rgba(22,63,44,0.08)] md:h-[26.5rem]">
+        <div className="flex h-[24.75rem] items-center justify-center overflow-hidden rounded-[1.75rem] bg-[#FBF9F6] text-[#6A756F] transition-shadow duration-300 ease-out group-hover:shadow-[0_18px_40px_rgba(22,63,44,0.08)] md:h-[27.25rem]">
           Sin imagen
         </div>
       )}
@@ -205,7 +207,7 @@ export function CatalogueBrowser({ pricingByKey, products }: CatalogueBrowserPro
             </p>
           </div>
 
-          <div className="grid gap-x-8 gap-y-12 md:grid-cols-2 lg:gap-y-[3.25rem] 2xl:grid-cols-3">
+          <div className="grid gap-x-6 gap-y-12 md:grid-cols-2 md:gap-x-7 lg:grid-cols-3 lg:gap-x-7 lg:gap-y-[3.25rem]">
             {visibleProducts.map((product) => (
               <ProductCard key={product.id} pricingByKey={pricingByKey} product={product} />
             ))}
