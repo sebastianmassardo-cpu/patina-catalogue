@@ -139,7 +139,7 @@ export default async function Home() {
               </h1>
 
               <p className="mt-4 max-w-md text-[14px] leading-6 text-[#5C6962] md:text-[15px] md:leading-7">
-                Piezas únicas para regalar, coleccionar y compartir momentos
+                Piezas únicas para regalar, coleccionar y compartir recuerdos que permanecen
               </p>
 
               <div className="mt-5">

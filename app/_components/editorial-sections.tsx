@@ -67,36 +67,42 @@ function EditorialTextBlock({
       <h2 className="mt-3 font-serif text-[1.72rem] leading-[1.12] tracking-[-0.038em] text-[#163F2C] md:text-[2.12rem]">
         {title}
       </h2>
-      <p className="mt-4 text-[13px] leading-7 text-[#66736C]">{body}</p>
+      {body ? <p className="mt-4 text-[13px] leading-7 text-[#66736C]">{body}</p> : null}
     </div>
   )
 }
 
 export function ContextEditorialSection() {
   return (
-    <section className="mx-auto max-w-7xl px-6 pb-12 pt-10 md:px-10 md:pb-20 md:pt-16">
-      <div className="grid gap-8 lg:grid-cols-[minmax(0,0.34fr)_minmax(0,0.66fr)] lg:items-start lg:gap-12">
-        <div className="lg:pt-14">
+    <section className="mx-auto max-w-7xl px-6 pb-14 pt-10 md:px-10 md:pb-24 md:pt-20">
+      <div className="grid gap-8 lg:grid-cols-[17rem_minmax(0,1fr)] lg:items-center lg:gap-10 xl:grid-cols-[18rem_minmax(0,1fr)] xl:gap-14">
+        <div className="lg:max-w-[16rem] lg:justify-self-start">
           <EditorialTextBlock
-            eyebrow="ENMARCA EL MOMENTO"
-            title="Lo que deja huella"
-            body="Piezas únicas para celebrar, compartir y dar forma a recuerdos que permanecen."
+            eyebrow="EL MOMENTO"
+            title="Enmarca tus celebraciones."
+            body=""
           />
         </div>
 
-        <div className="relative">
-          <div className="absolute inset-x-[12%] top-[8%] hidden h-px bg-[#E7DDD5] lg:block" />
-          <EditorialImage
-            src={CONTEXT_IMAGES[0]}
-            alt="Copas PATINA en un contexto de mesa"
-            className="h-[25rem] md:h-[35rem] lg:mr-24"
-          />
-          <div className="mt-4 md:mt-5 lg:absolute lg:-bottom-12 lg:right-0 lg:mt-0 lg:w-[36%]">
-            <EditorialImage
-              src={CONTEXT_IMAGES[1]}
-              alt="Detalle de copas PATINA en un contexto cotidiano"
-              className="h-[18rem] md:h-[22rem]"
+        <div className="relative isolate lg:pb-14">
+          <div className="overflow-hidden rounded-[2.15rem] bg-[#F3EEE8] shadow-[0_30px_64px_rgba(22,63,44,0.08)]">
+            <img
+              src={CONTEXT_IMAGES[0]}
+              alt="Copas PATINA en un contexto de mesa"
+              className="h-[25rem] w-full object-cover md:h-[35rem] lg:h-[39rem]"
             />
+          </div>
+
+          <div className="ml-auto mt-4 w-[72%] sm:w-[60%] md:mt-5 md:w-[45%] lg:absolute lg:bottom-0 lg:right-0 lg:mt-0 lg:w-[34%] xl:w-[32%]">
+            <div className="rounded-[1.8rem] bg-[#FBF8F4] p-1.5 shadow-[0_22px_44px_rgba(22,63,44,0.12)] ring-1 ring-[#EEE5DC]/85">
+              <div className="overflow-hidden rounded-[1.45rem]">
+                <img
+                  src={CONTEXT_IMAGES[1]}
+                  alt="Detalle de copas PATINA en un contexto cotidiano"
+                  className="h-[18rem] w-full object-cover md:h-[22rem] lg:h-[24rem]"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -128,11 +134,11 @@ export function DetailEditorialSection() {
           </div>
 
           <div className="lg:pl-4">
-            <EditorialTextBlock
-              eyebrow="El detalle"
-              title="Cada trazo deja su huella."
-              body="El vidrio conserva la textura del pulso y la calma del oficio."
-            />
+          <EditorialTextBlock
+            eyebrow="El detalle"
+            title="Cada trazo deja su huella."
+            body=""
+          />
           </div>
         </div>
       </div>
@@ -145,8 +151,8 @@ export function ProcessEditorialSection() {
     <section className="mx-auto max-w-7xl px-6 pb-12 pt-12 md:px-10 md:pb-20 md:pt-24">
       <EditorialTextBlock
         eyebrow="El proceso"
-        title="Del vidrio al gesto final."
-        body="Una secuencia breve, manual y cuidada, donde cada etapa sostiene la siguiente."
+        title="Del vidrio al color."
+        body=""
         align="center"
       />
 

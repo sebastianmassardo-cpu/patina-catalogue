@@ -176,9 +176,6 @@ export function CatalogueBrowser({ pricingByKey, products }: CatalogueBrowserPro
                 <p className="text-[11px] uppercase tracking-[0.34em] text-[#7A857E]">
                   Colecciones
                 </p>
-                <p className="mt-3 text-sm leading-7 text-[#69736D]">
-                  Recorre nuestras series y encuentra la que más va contigo
-                </p>
               </div>
 
               <div className="flex flex-wrap gap-2 lg:max-w-3xl lg:justify-end">
@@ -202,11 +199,6 @@ export function CatalogueBrowser({ pricingByKey, products }: CatalogueBrowserPro
             <div>
               <p className="text-[11px] uppercase tracking-[0.34em] text-[#7A857E]">
                 Galería
-              </p>
-              <p className="mt-3 max-w-xl text-sm leading-7 text-[#69736D]">
-                {activeCollectionId === ALL_COLLECTIONS_ID
-                  ? 'Conoce nuestro catálogo de copas, pintadas a mano y únicas en cada detalle'
-                  : `Piezas reunidas en torno a la colección ${activeCollectionLabel}.`}
               </p>
             </div>
 

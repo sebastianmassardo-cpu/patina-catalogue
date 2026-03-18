@@ -28,13 +28,10 @@ export function PricingSummary({ groups }: PricingSummaryProps) {
                 Precios por formato
               </p>
               <h2 className="mt-3 max-w-xl font-serif text-[1.6rem] leading-[1.12] tracking-[-0.03em] text-[#163F2C] md:text-[2.02rem]">
-                Una guia serena para elegir formatos y combinaciones.
+                Colecciones combinables por grupo de precio.
               </h2>
             </div>
 
-            <p className="max-w-xs text-[11px] leading-6 text-[#77827C] lg:justify-self-end lg:text-right">
-              Puedes combinar colecciones dentro de un mismo grupo de precio.
-            </p>
           </div>
 
           <div className="mt-8 grid gap-5 lg:grid-cols-2 xl:grid-cols-3">
