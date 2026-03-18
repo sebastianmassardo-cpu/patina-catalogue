@@ -74,13 +74,12 @@ export default async function Home() {
 
         <div className="relative mx-auto max-w-7xl px-6 pb-5 pt-4 md:px-10 md:pb-8 md:pt-5">
           <header className="flex items-center justify-between gap-4 border-b border-[#E4DCD4] pb-4 md:pb-5">
-            <div className="flex shrink-0 flex-col items-start gap-1.5">
+            <div className="shrink-0">
               <img
                 src="/logo-patina.png"
                 alt="PÁTINA"
                 className="h-12 w-auto object-contain md:h-14"
               />
-              <div className="h-px w-16 bg-[#DDD2C8] md:w-20" />
             </div>
 
             <div className="flex max-w-[13rem] flex-wrap justify-end gap-1.5 md:max-w-none">
@@ -140,7 +139,7 @@ export default async function Home() {
               </h1>
 
               <p className="mt-4 max-w-md text-[14px] leading-6 text-[#5C6962] md:text-[15px] md:leading-7">
-                Piezas únicas para regalar, coleccionar y habitar la mesa.
+                Piezas únicas para regalar, coleccionar y compartir momentos
               </p>
 
               <div className="mt-5">
@@ -174,9 +173,6 @@ export default async function Home() {
           <div className="relative mx-auto max-w-2xl text-center">
             <p className="font-serif text-[1.65rem] leading-[1.18] tracking-[-0.035em] text-[#163F2C] md:text-[2.05rem]">
               El arte de lo irrepetible
-            </p>
-            <p className="mt-4 text-[13px] leading-7 text-[#66736C] md:text-[14px]">
-              Cada copa conserva la huella sutil de un gesto hecho a mano.
             </p>
           </div>
         </div>

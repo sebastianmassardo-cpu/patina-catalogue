@@ -33,7 +33,7 @@ export function PricingSummary({ groups }: PricingSummaryProps) {
             </div>
 
             <p className="max-w-xs text-[11px] leading-6 text-[#77827C] lg:justify-self-end lg:text-right">
-              Puedes combinar disenos dentro de un mismo grupo de precio.
+              Puedes combinar colecciones dentro de un mismo grupo de precio.
             </p>
           </div>
 

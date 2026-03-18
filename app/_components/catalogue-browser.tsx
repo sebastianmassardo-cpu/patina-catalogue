@@ -121,16 +121,27 @@ function ProductCard({
 
 export function CatalogueBrowser({ pricingByKey, products }: CatalogueBrowserProps) {
   const catalogueProducts = products.filter((product) => !isPackOnlyProduct(product))
+  const sortedCatalogueProducts = [...catalogueProducts].sort((left, right) => {
+    const leftCollection = left.collection?.trim() || ''
+    const rightCollection = right.collection?.trim() || ''
 
-  const collectionValues = catalogueProducts
+    return (
+      leftCollection.localeCompare(rightCollection, 'es', { sensitivity: 'base' }) ||
+      left.name.localeCompare(right.name, 'es', { sensitivity: 'base' })
+    )
+  })
+
+  const collectionValues = sortedCatalogueProducts
     .map((product) => product.collection?.trim())
     .filter((collection): collection is string => Boolean(collection))
   const collections = [
     { id: ALL_COLLECTIONS_ID, label: ALL_COLLECTIONS_LABEL },
-    ...Array.from(new Set(collectionValues)).map((collection) => ({
-      id: collection,
-      label: collection,
-    })),
+    ...Array.from(new Set(collectionValues))
+      .sort((left, right) => left.localeCompare(right, 'es', { sensitivity: 'base' }))
+      .map((collection) => ({
+        id: collection,
+        label: collection,
+      })),
   ]
 
   const [activeCollectionId, setActiveCollectionId] = useState(ALL_COLLECTIONS_ID)
@@ -141,8 +152,8 @@ export function CatalogueBrowser({ pricingByKey, products }: CatalogueBrowserPro
 
   const visibleProducts =
     activeCollectionId === ALL_COLLECTIONS_ID
-      ? catalogueProducts
-      : catalogueProducts.filter(
+      ? sortedCatalogueProducts
+      : sortedCatalogueProducts.filter(
           (product) => product.collection?.trim() === activeCollectionId
         )
 
@@ -166,8 +177,7 @@ export function CatalogueBrowser({ pricingByKey, products }: CatalogueBrowserPro
                   Colecciones
                 </p>
                 <p className="mt-3 text-sm leading-7 text-[#69736D]">
-                  Recorre el catálogo por series, afinidades y gestos que comparten
-                  una misma atmósfera.
+                  Recorre nuestras series y encuentra la que más va contigo
                 </p>
               </div>
 
@@ -195,7 +205,7 @@ export function CatalogueBrowser({ pricingByKey, products }: CatalogueBrowserPro
               </p>
               <p className="mt-3 max-w-xl text-sm leading-7 text-[#69736D]">
                 {activeCollectionId === ALL_COLLECTIONS_ID
-                  ? 'Vista completa del catálogo, dispuesta con un ritmo sereno y visual.'
+                  ? 'Conoce nuestro catálogo de copas, pintadas a mano y únicas en cada detalle'
                   : `Piezas reunidas en torno a la colección ${activeCollectionLabel}.`}
               </p>
             </div>

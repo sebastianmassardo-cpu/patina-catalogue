@@ -78,9 +78,9 @@ export function ContextEditorialSection() {
       <div className="grid gap-8 lg:grid-cols-[minmax(0,0.34fr)_minmax(0,0.66fr)] lg:items-start lg:gap-12">
         <div className="lg:pt-14">
           <EditorialTextBlock
-            eyebrow="En contexto"
-            title="Habitadas por la luz y la mesa."
-            body="Piezas que encuentran su lugar entre la sobremesa, la luz y el gesto diario."
+            eyebrow="ENMARCA EL MOMENTO"
+            title="Lo que deja huella"
+            body="Piezas únicas para celebrar, compartir y dar forma a recuerdos que permanecen."
           />
         </div>
 
