@@ -1,4 +1,5 @@
 export const dynamic = 'force-dynamic'
+import Image from 'next/image'
 import { CatalogueBrowser } from './_components/catalogue-browser'
 import {
   ContextEditorialSection,
@@ -75,8 +76,11 @@ export default async function Home() {
         <div className="relative mx-auto max-w-7xl px-6 pb-5 pt-4 md:px-10 md:pb-8 md:pt-5">
           <header className="flex items-center justify-between gap-4 border-b border-[#E4DCD4] pb-4 md:pb-5">
             <div className="shrink-0">
-              <img
+              <Image
                 src="/logo-patina.png"
+                width={152}
+                height={56}
+                priority
                 alt="PÁTINA"
                 className="h-12 w-auto object-contain md:h-14"
               />
@@ -155,11 +159,15 @@ export default async function Home() {
             </div>
 
             <div className="relative overflow-hidden rounded-[2rem] border border-[#E5DDD6] bg-[#ECE3DB] shadow-[0_18px_48px_rgba(22,63,44,0.08)]">
-              <img
+              <Image
                 src="/hero-patina.png"
+                fill
+                priority
+                sizes="(min-width: 1024px) 55vw, 100vw"
                 alt="Copas pintadas a mano de PÁTINA"
-                className="h-[19rem] w-full object-cover md:h-[24rem] lg:h-[28rem]"
+                className="object-cover"
               />
+              <div className="h-[19rem] md:h-[24rem] lg:h-[28rem]" />
             </div>
           </div>
         </div>

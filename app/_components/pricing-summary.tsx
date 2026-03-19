@@ -1,3 +1,4 @@
+import { formatCollectionLabel } from '../catalogue-display'
 import { formatClpPrice, type PricingSummaryGroup } from '../pricing-config'
 
 type PricingSummaryProps = {
@@ -95,7 +96,7 @@ export function PricingSummary({ groups }: PricingSummaryProps) {
                           key={collectionLabel}
                           className="rounded-full border border-[#E9E0D8] bg-white/35 px-3 py-1.5 text-[10.5px] tracking-[0.02em] text-[#5C6962]"
                         >
-                          {collectionLabel}
+                          {formatCollectionLabel(collectionLabel)}
                         </span>
                       ))}
                     </div>

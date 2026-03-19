@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 const CONTEXT_IMAGES = [
   '/editorial/context/context-01.png',
   '/editorial/context/context-02.png',
@@ -11,8 +13,8 @@ const DETAIL_IMAGES = [
 const PROCESS_STEPS = [
   {
     image: '/editorial/process/process-01.png',
-    label: 'Seleccion',
-    note: 'El vidrio se elige por su proporcion, su brillo y su presencia.',
+    label: 'Selección',
+    note: 'El vidrio se elige por su proporción, su brillo y su presencia.',
   },
   {
     image: '/editorial/process/process-02.png',
@@ -21,7 +23,7 @@ const PROCESS_STEPS = [
   },
   {
     image: '/editorial/process/process-03.png',
-    label: 'Terminacion',
+    label: 'Terminación',
     note: 'La pieza encuentra su tono final en un acabado sobrio y preciso.',
   },
 ] as const
@@ -29,10 +31,12 @@ const PROCESS_STEPS = [
 function EditorialImage({
   alt,
   className,
+  sizes = '(min-width: 1024px) 32vw, 100vw',
   src,
 }: {
   alt: string
   className: string
+  sizes?: string
   src: string
 }) {
   return (
@@ -41,10 +45,12 @@ function EditorialImage({
     >
       <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/10 via-transparent to-white/10 opacity-35 transition-opacity duration-300 ease-out group-hover:opacity-20" />
       <div className="absolute inset-0 z-10 ring-1 ring-inset ring-white/40" />
-      <img
+      <Image
         src={src}
         alt={alt}
-        className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+        fill
+        sizes={sizes}
+        className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
       />
     </div>
   )
@@ -85,22 +91,29 @@ export function ContextEditorialSection() {
         </div>
 
         <div className="relative isolate lg:pb-14">
-          <div className="overflow-hidden rounded-[2.15rem] bg-[#F3EEE8] shadow-[0_30px_64px_rgba(22,63,44,0.08)]">
-            <img
-              src={CONTEXT_IMAGES[0]}
-              alt="Copas PATINA en un contexto de mesa"
-              className="h-[25rem] w-full object-cover md:h-[35rem] lg:h-[39rem]"
-            />
+            <div className="relative overflow-hidden rounded-[2.15rem] bg-[#F3EEE8] shadow-[0_30px_64px_rgba(22,63,44,0.08)]">
+              <Image
+                src={CONTEXT_IMAGES[0]}
+                fill
+                priority
+                sizes="(min-width: 1280px) 58vw, 100vw"
+              alt="Copas PÁTINA en un contexto de mesa"
+                className="object-cover"
+              />
+              <div className="h-[25rem] md:h-[35rem] lg:h-[39rem]" />
           </div>
 
           <div className="ml-auto mt-4 w-[72%] sm:w-[60%] md:mt-5 md:w-[45%] lg:absolute lg:bottom-0 lg:right-0 lg:mt-0 lg:w-[34%] xl:w-[32%]">
             <div className="rounded-[1.8rem] bg-[#FBF8F4] p-1.5 shadow-[0_22px_44px_rgba(22,63,44,0.12)] ring-1 ring-[#EEE5DC]/85">
-              <div className="overflow-hidden rounded-[1.45rem]">
-                <img
+              <div className="relative overflow-hidden rounded-[1.45rem]">
+                <Image
                   src={CONTEXT_IMAGES[1]}
-                  alt="Detalle de copas PATINA en un contexto cotidiano"
-                  className="h-[18rem] w-full object-cover md:h-[22rem] lg:h-[24rem]"
+                  fill
+                  sizes="(min-width: 1280px) 22vw, 72vw"
+                  alt="Detalle de copas PÁTINA en un contexto cotidiano"
+                  className="object-cover"
                 />
+                <div className="h-[18rem] md:h-[22rem] lg:h-[24rem]" />
               </div>
             </div>
           </div>
@@ -172,7 +185,7 @@ export function ProcessEditorialSection() {
 
               <EditorialImage
                 src={step.image}
-                alt={`${step.label} del proceso artesanal de PATINA`}
+                alt={`${step.label} del proceso artesanal de PÁTINA`}
                 className="h-[20rem] md:h-[24rem]"
               />
 

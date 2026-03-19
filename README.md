@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Patina Catalogue Project
 
-## Getting Started
+Catalogue site for Patina built with Next.js App Router and Supabase.
 
-First, run the development server:
+## Setup
+
+1. Create `.env.local` in the project root.
+2. Copy the variables from `.env.example`.
+3. Fill in:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=your-project-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+```
+
+4. Install dependencies:
+
+```bash
+npm install
+```
+
+5. Start the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project map
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Main route: `app/page.tsx`
+- Catalogue UI: `app/_components/catalogue-browser.tsx`
+- Editorial sections: `app/_components/editorial-sections.tsx`
+- Pricing summary: `app/_components/pricing-summary.tsx`
+- Pricing logic: `app/pricing-config.ts`
+- Supabase client: `lib/supabase.ts`
 
-## Learn More
+## Security
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Keep runtime credentials in `.env.local` only.
+- Never commit service-role keys to this repository.
+- If a key was previously committed, rotate it in Supabase.
