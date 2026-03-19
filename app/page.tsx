@@ -187,7 +187,11 @@ export default async function Home() {
       </section>
 
       <ContextEditorialSection />
-      <CatalogueBrowser pricingByKey={pricingByKey} products={availableProducts} />
+      <CatalogueBrowser
+        packPricingGroups={pricingSummaryGroups}
+        pricingByKey={pricingByKey}
+        products={availableProducts}
+      />
       <DetailEditorialSection />
       <ProcessEditorialSection />
       <PricingSummary groups={pricingSummaryGroups} />

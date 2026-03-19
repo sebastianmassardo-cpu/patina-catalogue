@@ -18,8 +18,10 @@
 ## Copy Principles
 - Keep copy concise, intentional, and understated.
 - Prefer short headings, short supporting lines, and restrained microcopy.
+- Treat every visible label, heading, caption, and helper line as customer-facing.
 - Avoid generic ecommerce language, hype, urgency, and exaggerated luxury claims.
 - Do not over-explain craftsmanship where the photography and layout already communicate it.
+- Never surface internal instructions, placeholders, or implementation language in the interface.
 - Use language that feels composed, tactile, and premium.
 
 ## Image Authenticity Rules

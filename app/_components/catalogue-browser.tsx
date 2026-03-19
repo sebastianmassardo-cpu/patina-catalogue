@@ -9,6 +9,7 @@ import {
   getProductPricing,
   isPackOnlyProduct,
   type PricingLookup,
+  type PricingSummaryGroup,
 } from '../pricing-config'
 
 const ALL_COLLECTIONS_ID = '__all__'
@@ -17,6 +18,7 @@ const ALL_PRICE_FILTER_ID = '__all_prices__'
 const ALL_PRICE_FILTER_LABEL = 'Todos'
 
 type CatalogueBrowserProps = {
+  packPricingGroups: PricingSummaryGroup[]
   products: Product[]
   pricingByKey: PricingLookup
 }
@@ -54,6 +56,12 @@ const CURATED_PRICE_FILTERS: PriceFilterOption[] = [
     maxPrice: null,
   },
 ]
+
+const PACK_PRICE_LABELS = [
+  { key: 'price_1', label: '1 copa' },
+  { key: 'price_2', label: '2 copas' },
+  { key: 'price_4', label: '4 copas' },
+] as const
 
 function FilterChip({ isActive, label, onClick }: FilterChipProps) {
   return (
@@ -198,7 +206,90 @@ function ProductCard({
   )
 }
 
-export function CatalogueBrowser({ pricingByKey, products }: CatalogueBrowserProps) {
+function PackPricingMenu({ groups }: { groups: PricingSummaryGroup[] }) {
+  return (
+    <div className="rounded-[1.7rem] border border-[#E8DED6] bg-[linear-gradient(180deg,rgba(255,255,255,0.6),rgba(247,244,240,0.92))] px-4 py-4 shadow-[0_14px_30px_rgba(22,63,44,0.04)] md:px-5 md:py-5">
+      <div className="max-w-xl">
+        <p className="text-[8px] uppercase tracking-[0.28em] text-[#7A857E]">Menú de packs</p>
+        <p className="mt-2 font-serif text-[1.08rem] leading-[1.16] tracking-[-0.03em] text-[#163F2C] md:text-[1.18rem]">
+          Colecciones y packs.
+        </p>
+      </div>
+
+      <div className="mt-4 grid gap-3 xl:grid-cols-3">
+        {groups.map((group) => {
+          const priceRows = PACK_PRICE_LABELS.reduce<
+            Array<{
+              key: (typeof PACK_PRICE_LABELS)[number]['key']
+              label: (typeof PACK_PRICE_LABELS)[number]['label']
+              value: number
+            }>
+          >((rows, priceLabel) => {
+            const value = group[priceLabel.key]
+
+            if (value === null) {
+              return rows
+            }
+
+            rows.push({
+              key: priceLabel.key,
+              label: priceLabel.label,
+              value,
+            })
+
+            return rows
+          }, [])
+
+          return (
+            <article
+              key={group.id}
+              className="rounded-[1.35rem] border border-[#ECE2D9] bg-white/52 px-4 py-4"
+            >
+              <div>
+                <p className="text-[8px] uppercase tracking-[0.28em] text-[#8D9690]">
+                  Grupo de precio
+                </p>
+                <h3 className="mt-2 font-serif text-[1.08rem] leading-none tracking-[-0.03em] text-[#163F2C]">
+                  {group.label}
+                </h3>
+              </div>
+
+              <div className="mt-4 grid grid-cols-3 gap-2 border-y border-[#ECE2D9] py-3">
+                {priceRows.map((priceRow) => (
+                  <div key={priceRow.key} className="min-w-0">
+                    <p className="text-[7px] uppercase tracking-[0.18em] text-[#7A847E]">
+                      {priceRow.label}
+                    </p>
+                    <p className="mt-2 font-serif text-[0.9rem] leading-none tracking-[0.02em] text-[#30463B] md:text-[0.98rem]">
+                      {formatClpPrice(priceRow.value)}
+                    </p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-4 flex flex-wrap gap-2">
+                {group.collectionLabels.map((collectionLabel) => (
+                  <span
+                    key={collectionLabel}
+                    className="rounded-full border border-[#E9E0D8] bg-white/42 px-3 py-1.5 text-[10px] tracking-[0.02em] text-[#5C6962]"
+                  >
+                    {formatCollectionLabel(collectionLabel)}
+                  </span>
+                ))}
+              </div>
+            </article>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+export function CatalogueBrowser({
+  packPricingGroups,
+  pricingByKey,
+  products,
+}: CatalogueBrowserProps) {
   const catalogueProducts = products.filter((product) => !isPackOnlyProduct(product))
   const sortedCatalogueProducts = [...catalogueProducts].sort((left, right) => {
     const leftCollection = left.collection?.trim() || ''
@@ -226,6 +317,7 @@ export function CatalogueBrowser({ pricingByKey, products }: CatalogueBrowserPro
 
   const [activeCollectionId, setActiveCollectionId] = useState(ALL_COLLECTIONS_ID)
   const [activePriceFilterId, setActivePriceFilterId] = useState(ALL_PRICE_FILTER_ID)
+  const [isPackMenuOpen, setIsPackMenuOpen] = useState(false)
 
   const activeCollectionLabel =
     activeCollectionId === ALL_COLLECTIONS_ID
@@ -297,6 +389,37 @@ export function CatalogueBrowser({ pricingByKey, products }: CatalogueBrowserPro
                       {catalogueCountLabel}
                     </span>
 
+                    {packPricingGroups.length ? (
+                      <button
+                        type="button"
+                        aria-expanded={isPackMenuOpen}
+                        onClick={() => {
+                          setIsPackMenuOpen((isOpen) => !isOpen)
+                        }}
+                        className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[9px] uppercase tracking-[0.22em] transition-all duration-300 ease-out ${
+                          isPackMenuOpen
+                            ? 'border-[#C9D5CD] bg-[#F1F5F0] text-[#163F2C] shadow-[0_10px_20px_rgba(22,63,44,0.05)]'
+                            : 'border-[#E5DBD2] bg-white/42 text-[#5D6C64] hover:-translate-y-0.5 hover:border-[#D4CAC1] hover:bg-white/68 hover:text-[#163F2C]'
+                        }`}
+                      >
+                        Ver packs
+                        <svg
+                          aria-hidden="true"
+                          viewBox="0 0 12 12"
+                          className={`h-3 w-3 transition-transform duration-300 ${
+                            isPackMenuOpen ? 'rotate-180' : ''
+                          }`}
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.4"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M2.25 4.5 6 8.1 9.75 4.5" />
+                        </svg>
+                      </button>
+                    ) : null}
+
                     {activeFilterCount > 0 ? (
                       <button
                         type="button"
@@ -313,6 +436,10 @@ export function CatalogueBrowser({ pricingByKey, products }: CatalogueBrowserPro
                     ) : null}
                   </div>
                 </div>
+
+                {isPackMenuOpen && packPricingGroups.length ? (
+                  <PackPricingMenu groups={packPricingGroups} />
+                ) : null}
 
                 <div className="grid gap-5 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
                   <div>

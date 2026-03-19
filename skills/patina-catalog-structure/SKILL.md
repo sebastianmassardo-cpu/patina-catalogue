@@ -24,6 +24,7 @@ Treat the catalogue as a curated sequence of handcrafted objects and editorial s
 - Balance grids and text blocks so neither overwhelms the other.
 - Keep filters, labels, and pricing surfaces integrated into the catalog flow rather than feeling bolted on.
 - Favor clear grouping and repetition patterns over one-off layout tricks.
+- Make menus, labels, and support lines read like finished customer-facing copy.
 
 ## Avoid
 
@@ -31,6 +32,7 @@ Treat the catalogue as a curated sequence of handcrafted objects and editorial s
 - Repeating the same structural motif so often that the page feels mechanical.
 - Adding unnecessary wrappers, headings, or support text.
 - Letting pricing or controls overpower the objects themselves.
+- Showing literal instructions, placeholder phrasing, or internal guidance in the catalogue UI.
 
 ## Project Notes
 

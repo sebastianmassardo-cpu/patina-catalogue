@@ -32,6 +32,7 @@ Write as if the brand is calm, confident, and already knows its value. Keep the 
 - Over-explaining craftsmanship in every block.
 - Repeating the same adjectives across the page.
 - Sounding loud, trendy, or promotional.
+- Leaving text that reads like a prompt, placeholder, or internal note instead of finished customer-facing copy.
 
 ## Product Copy Guardrails
 

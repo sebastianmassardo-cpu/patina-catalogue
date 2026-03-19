@@ -24,6 +24,7 @@ Treat every image decision as part of the product presentation. The goal is to m
 - Keep transitions between image types calm and deliberate.
 - Align related images through shared radius, spacing, and visual weight.
 - Let the strongest product image lead each section.
+- Keep any captions, labels, or supporting lines around images customer-facing and editorial.
 
 ## Avoid
 
@@ -31,6 +32,7 @@ Treat every image decision as part of the product presentation. The goal is to m
 - Cropping out rims, stems, or hand-painted motifs without a clear reason.
 - Mixing image treatments that make sections feel unrelated.
 - Using decorative overlays that compete with the object.
+- Leaving literal directions, placeholders, or internal notes visible near the imagery.
 
 ## Project Notes
 

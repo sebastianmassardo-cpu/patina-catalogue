@@ -26,6 +26,7 @@ Prefer a few high-impact refinements over a redesign. Improve rhythm, proportion
 - Use subtle layering, border treatment, and shadow changes to add polish without noise.
 - Improve asymmetrical layouts so they feel deliberate rather than accidental.
 - Let imagery lead when the photography is strong.
+- Treat any visible text added during polish as finished customer-facing copy, not interface instructions.
 
 ## Avoid
 
@@ -33,6 +34,7 @@ Prefer a few high-impact refinements over a redesign. Improve rhythm, proportion
 - Overusing gradients, blur, motion, or accent colors.
 - Turning empty space into crowded space.
 - Breaking established typography and tone for one isolated section.
+- Leaving literal instructions, placeholders, or AI-sounding helper text visible in the design.
 
 ## Project Notes
 
