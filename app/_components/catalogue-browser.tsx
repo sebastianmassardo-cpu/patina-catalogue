@@ -2,7 +2,12 @@
 
 import Image from 'next/image'
 import { startTransition, useState } from 'react'
-import { formatCollectionLabel } from '../catalogue-display'
+import {
+  formatCollectionLabel,
+  formatProductDescription,
+  getProductGlassType,
+  type GlassTypeOption,
+} from '../catalogue-display'
 import type { Product } from '../catalogue-types'
 import {
   formatClpPrice,
@@ -16,6 +21,8 @@ const ALL_COLLECTIONS_ID = '__all__'
 const ALL_COLLECTIONS_LABEL = 'Todas'
 const ALL_PRICE_FILTER_ID = '__all_prices__'
 const ALL_PRICE_FILTER_LABEL = 'Todos'
+const ALL_GLASS_TYPES_ID = '__all_glass_types__'
+const ALL_GLASS_TYPES_LABEL = 'Todos'
 
 type CatalogueBrowserProps = {
   packPricingGroups: PricingSummaryGroup[]
@@ -35,6 +42,8 @@ type PriceFilterOption = {
   minPrice: number | null
   maxPrice: number | null
 }
+
+type GlassTypeFilterOption = Pick<GlassTypeOption, 'id' | 'label'>
 
 const CURATED_PRICE_FILTERS: PriceFilterOption[] = [
   {
@@ -125,6 +134,38 @@ function matchesPriceFilter(
   return priceMatchesRange(displayPrice, activePriceFilter)
 }
 
+function buildGlassTypeFilterOptions(products: Product[]): GlassTypeFilterOption[] {
+  const glassTypesById = products.reduce<Map<string, GlassTypeFilterOption>>((lookup, product) => {
+    const glassType = getProductGlassType(product)
+
+    if (glassType && !lookup.has(glassType.id)) {
+      lookup.set(glassType.id, {
+        id: glassType.id,
+        label: glassType.label,
+      })
+    }
+
+    return lookup
+  }, new Map())
+
+  return [
+    {
+      id: ALL_GLASS_TYPES_ID,
+      label: ALL_GLASS_TYPES_LABEL,
+    },
+    ...Array.from(glassTypesById.values()).sort((left, right) =>
+      left.label.localeCompare(right.label, 'es', { sensitivity: 'base' })
+    ),
+  ]
+}
+
+function matchesGlassTypeFilter(product: Product, activeGlassTypeId: string) {
+  return (
+    activeGlassTypeId === ALL_GLASS_TYPES_ID ||
+    getProductGlassType(product)?.id === activeGlassTypeId
+  )
+}
+
 function ProductCard({
   pricingByKey,
   product,
@@ -133,6 +174,8 @@ function ProductCard({
   product: Product
 }) {
   const pricing = getProductPricing(product, pricingByKey)
+  const glassType = getProductGlassType(product)
+  const description = formatProductDescription(product)
   const displayPrice = getDisplayPrice(product, pricingByKey)
   const hasPackPricing = Boolean(pricing?.price_2 || pricing?.price_4)
   const whatsappMessage = `Hola, me interesa la copa ${product.name}`
@@ -170,6 +213,12 @@ function ProductCard({
           <h2 className="mt-2 font-serif text-[1.5rem] leading-[1.18] tracking-[-0.035em] text-[#163F2C]">
             {product.name}
           </h2>
+
+          {glassType ? (
+            <p className="mt-2 font-serif text-[0.98rem] italic leading-snug tracking-[-0.01em] text-[#66736B]">
+              {glassType.displayLabel}
+            </p>
+          ) : null}
         </div>
 
         <div className="shrink-0 pt-1 text-right">
@@ -183,7 +232,7 @@ function ProductCard({
       </div>
 
       <p className="mt-3 max-w-[32rem] text-[13px] leading-6 text-[#647069]">
-        {product.description || 'Copa única pintada a mano.'}
+        {description}
       </p>
 
       {hasPackPricing ? (
@@ -314,9 +363,11 @@ export function CatalogueBrowser({
       })),
   ]
   const priceFilterOptions = buildPriceFilterOptions(sortedCatalogueProducts, pricingByKey)
+  const glassTypeFilterOptions = buildGlassTypeFilterOptions(sortedCatalogueProducts)
 
   const [activeCollectionId, setActiveCollectionId] = useState(ALL_COLLECTIONS_ID)
   const [activePriceFilterId, setActivePriceFilterId] = useState(ALL_PRICE_FILTER_ID)
+  const [activeGlassTypeId, setActiveGlassTypeId] = useState(ALL_GLASS_TYPES_ID)
   const [isPackMenuOpen, setIsPackMenuOpen] = useState(false)
 
   const activeCollectionLabel =
@@ -328,6 +379,11 @@ export function CatalogueBrowser({
     priceFilterOptions[0]
   const activePriceFilterLabel =
     activePriceFilter.id === ALL_PRICE_FILTER_ID ? ALL_PRICE_FILTER_LABEL : activePriceFilter.label
+  const activeGlassType =
+    glassTypeFilterOptions.find((glassType) => glassType.id === activeGlassTypeId) ??
+    glassTypeFilterOptions[0]
+  const activeGlassTypeLabel =
+    activeGlassType.id === ALL_GLASS_TYPES_ID ? ALL_GLASS_TYPES_LABEL : activeGlassType.label
 
   const collectionFilteredProducts =
     activeCollectionId === ALL_COLLECTIONS_ID
@@ -335,16 +391,21 @@ export function CatalogueBrowser({
       : sortedCatalogueProducts.filter(
           (product) => product.collection?.trim() === activeCollectionId
         )
-  const visibleProducts = collectionFilteredProducts.filter((product) =>
+  const glassTypeFilteredProducts = collectionFilteredProducts.filter((product) =>
+    matchesGlassTypeFilter(product, activeGlassType.id)
+  )
+  const visibleProducts = glassTypeFilteredProducts.filter((product) =>
     matchesPriceFilter(product, pricingByKey, activePriceFilter)
   )
   const activeFilterCount =
     Number(activeCollectionId !== ALL_COLLECTIONS_ID) +
+    Number(activeGlassType.id !== ALL_GLASS_TYPES_ID) +
     Number(activePriceFilter.id !== ALL_PRICE_FILTER_ID)
   const gallerySummary =
     activeFilterCount === 0
       ? 'Todas las piezas disponibles'
       : [activeCollectionId !== ALL_COLLECTIONS_ID ? activeCollectionLabel : null]
+          .concat(activeGlassType.id !== ALL_GLASS_TYPES_ID ? activeGlassTypeLabel : null)
           .concat(activePriceFilter.id !== ALL_PRICE_FILTER_ID ? activePriceFilterLabel : null)
           .filter((value): value is string => Boolean(value))
           .join(' · ')
@@ -377,7 +438,7 @@ export function CatalogueBrowser({
                       Explorar
                     </p>
                     <p className="mt-3 font-serif text-[1.25rem] leading-[1.14] tracking-[-0.03em] text-[#163F2C] md:text-[1.45rem]">
-                      Colecciones y precios.
+                      Colecciones, tipos y precios.
                     </p>
                     <p className="mt-2 max-w-md text-[12px] leading-6 text-[#647069] md:text-[13px]">
                       Filtra la selección sin perder la calma visual del catálogo.
@@ -426,6 +487,7 @@ export function CatalogueBrowser({
                         onClick={() => {
                           startTransition(() => {
                             setActiveCollectionId(ALL_COLLECTIONS_ID)
+                            setActiveGlassTypeId(ALL_GLASS_TYPES_ID)
                             setActivePriceFilterId(ALL_PRICE_FILTER_ID)
                           })
                         }}
@@ -441,7 +503,7 @@ export function CatalogueBrowser({
                   <PackPricingMenu groups={packPricingGroups} />
                 ) : null}
 
-                <div className="grid gap-5 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
+                <div className="grid gap-5 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)_minmax(0,0.8fr)]">
                   <div>
                     <p className="text-[9px] uppercase tracking-[0.28em] text-[#8A948E]">
                       Colección
@@ -456,6 +518,27 @@ export function CatalogueBrowser({
                           onClick={() => {
                             startTransition(() => {
                               setActiveCollectionId(collection.id)
+                            })
+                          }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <p className="text-[9px] uppercase tracking-[0.28em] text-[#8A948E]">
+                      Tipo de copa
+                    </p>
+
+                    <div className="-mx-1 mt-3 flex gap-2 overflow-x-auto px-1 pb-1 md:mx-0 md:flex-wrap md:overflow-visible md:px-0 md:pb-0">
+                      {glassTypeFilterOptions.map((glassType) => (
+                        <FilterChip
+                          key={glassType.id}
+                          label={glassType.label}
+                          isActive={activeGlassType.id === glassType.id}
+                          onClick={() => {
+                            startTransition(() => {
+                              setActiveGlassTypeId(glassType.id)
                             })
                           }}
                         />
@@ -489,6 +572,12 @@ export function CatalogueBrowser({
                   {activeCollectionId !== ALL_COLLECTIONS_ID ? (
                     <span className="inline-flex rounded-full border border-[#E5DBD2] bg-white/36 px-3 py-1.5 text-[9px] uppercase tracking-[0.22em] text-[#5B6A62]">
                       {activeCollectionLabel}
+                    </span>
+                  ) : null}
+
+                  {activeGlassType.id !== ALL_GLASS_TYPES_ID ? (
+                    <span className="inline-flex rounded-full border border-[#E5DBD2] bg-white/36 px-3 py-1.5 text-[9px] uppercase tracking-[0.22em] text-[#5B6A62]">
+                      {activeGlassTypeLabel}
                     </span>
                   ) : null}
 
