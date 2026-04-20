@@ -7,9 +7,10 @@ import {
   ProcessEditorialSection,
 } from './_components/editorial-sections'
 import { PricingSummary } from './_components/pricing-summary'
-import type { PricingRow } from './catalogue-types'
+import type { CollectionPricingRule, PriceRule, PricingRow } from './catalogue-types'
 import {
   buildPricingLookup,
+  buildPricingRowsFromRules,
   buildPricingSummaryGroups,
   isPackOnlyProduct,
   type PricingLookup,
@@ -36,17 +37,48 @@ export default async function Home() {
 
   let pricingByKey: PricingLookup = {}
   let pricingRows: PricingRow[] = []
+  let directPricingRows: PricingRow[] = []
 
-  if (pricingKeys.length > 0) {
+  const { data: priceRules, error: priceRulesError } = await supabase
+    .from('prices')
+    .select('id, glass_key, design_key, price_1, price_2, price_4, created_at, updated_at')
+  const { data: collectionPricingRules, error: collectionPricingError } = await supabase
+    .from('collection_pricing')
+    .select('id, collection_key, design_key, created_at, updated_at')
+
+  if (priceRulesError || collectionPricingError) {
+    const missingDirectPricingTables =
+      priceRulesError?.code === 'PGRST205' || collectionPricingError?.code === 'PGRST205'
+
+    if (!missingDirectPricingTables) {
+      console.error(
+        'Error loading direct pricing',
+        priceRulesError?.message ?? collectionPricingError?.message
+      )
+    }
+  } else if (priceRules?.length && collectionPricingRules?.length) {
+    directPricingRows = buildPricingRowsFromRules(
+      catalogueProducts,
+      priceRules as PriceRule[],
+      collectionPricingRules as CollectionPricingRule[]
+    )
+    pricingRows = directPricingRows
+    pricingByKey = buildPricingLookup(pricingRows)
+  }
+
+  const directPricingKeys = new Set(directPricingRows.map((pricingRow) => pricingRow.price_key))
+  const legacyPricingKeys = pricingKeys.filter((pricingKey) => !directPricingKeys.has(pricingKey))
+
+  if (legacyPricingKeys.length > 0) {
     const { data: pricingData, error: pricingError } = await supabase
       .from('pricing')
       .select('id, price_key, price_1, price_2, price_4, created_at')
-      .in('price_key', pricingKeys)
+      .in('price_key', legacyPricingKeys)
 
     if (pricingError) {
       console.error('Error loading pricing', pricingError.message)
     } else {
-      pricingRows = pricingData ?? []
+      pricingRows = [...pricingRows, ...(pricingData ?? [])]
       pricingByKey = buildPricingLookup(pricingRows ?? [])
     }
   }

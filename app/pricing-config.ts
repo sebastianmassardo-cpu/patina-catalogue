@@ -1,8 +1,15 @@
-import type { PricingRow, Product } from './catalogue-types'
+import type { CollectionPricingRule, PriceRule, PricingRow, Product } from './catalogue-types'
+import { getProductGlassType } from './catalogue-display'
 
 type PricingLookupInput = Pick<Product, 'price_key'>
 
 export type PricingLookup = Record<string, PricingRow>
+export type PricingSummaryEntry = {
+  id: string
+  collectionLabel: string
+  glassTypeLabel: string
+}
+
 export type PricingSummaryGroup = {
   id: string
   label: string
@@ -10,12 +17,24 @@ export type PricingSummaryGroup = {
   price_2: number | null
   price_4: number | null
   collectionLabels: string[]
+  entries: PricingSummaryEntry[]
   priceKeys: string[]
 }
 
-function normalizePricingKey(value: string | null | undefined) {
-  const normalized = value?.trim().toLowerCase()
+export function normalizePricingToken(value: string | null | undefined) {
+  const normalized = value
+    ?.trim()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '')
+
   return normalized || null
+}
+
+function normalizePricingKey(value: string | null | undefined) {
+  return normalizePricingToken(value)
 }
 
 function getMostRecentPricingRows(pricingRows: PricingRow[]) {
@@ -77,6 +96,113 @@ export function getProductPricing(product: PricingLookupInput, pricingByKey: Pri
   return pricingByKey[pricingKey] ?? null
 }
 
+function getPriceKeyTail(priceKey: string) {
+  return priceKey.startsWith('copa_') ? priceKey.slice(5) : priceKey
+}
+
+function resolveGlassKey(priceKey: string, glassKeys: string[]) {
+  const tail = getPriceKeyTail(priceKey)
+
+  return glassKeys
+    .sort((left, right) => right.length - left.length)
+    .find((glassKey) => tail === glassKey || tail.startsWith(`${glassKey}_`))
+}
+
+function resolvePriceKeySuffix(priceKey: string, glassKey: string) {
+  const tail = getPriceKeyTail(priceKey)
+
+  if (tail === glassKey) {
+    return null
+  }
+
+  return tail.startsWith(`${glassKey}_`) ? tail.slice(glassKey.length + 1) : null
+}
+
+export function buildPricingRowsFromRules(
+  products: Product[],
+  priceRules: PriceRule[],
+  collectionPricingRules: CollectionPricingRule[]
+): PricingRow[] {
+  const pricesByGlassAndDesign = priceRules.reduce<Record<string, PriceRule>>(
+    (lookup, priceRule) => {
+      const glassKey = normalizePricingToken(priceRule.glass_key)
+      const designKey = normalizePricingToken(priceRule.design_key)
+
+      if (glassKey && designKey) {
+        lookup[`${glassKey}:${designKey}`] = priceRule
+      }
+
+      return lookup
+    },
+    {}
+  )
+  const designByCollection = collectionPricingRules.reduce<Record<string, string>>(
+    (lookup, collectionPricingRule) => {
+      const collectionKey = normalizePricingToken(collectionPricingRule.collection_key)
+      const designKey = normalizePricingToken(collectionPricingRule.design_key)
+
+      if (collectionKey && designKey) {
+        lookup[collectionKey] = designKey
+      }
+
+      return lookup
+    },
+    {}
+  )
+  const glassKeys = Array.from(
+    new Set(
+      priceRules
+        .map((priceRule) => normalizePricingToken(priceRule.glass_key))
+        .filter((glassKey): glassKey is string => Boolean(glassKey))
+    )
+  )
+  const pricingRowsByKey = products.reduce<Map<string, PricingRow>>((lookup, product) => {
+    const priceKey = resolveProductPriceKey(product)
+
+    if (!priceKey || isPackOnlyProduct(product)) {
+      return lookup
+    }
+
+    const glassKey = resolveGlassKey(priceKey, glassKeys)
+
+    if (!glassKey) {
+      return lookup
+    }
+
+    const collectionKey = normalizePricingToken(product.collection)
+    const suffixKey = resolvePriceKeySuffix(priceKey, glassKey)
+    const designKey =
+      (collectionKey ? designByCollection[collectionKey] : null) ??
+      (suffixKey ? designByCollection[suffixKey] : null) ??
+      (suffixKey === 'pers' || collectionKey?.startsWith('personalizado')
+        ? 'personalizado'
+        : null)
+
+    if (!designKey) {
+      return lookup
+    }
+
+    const priceRule = pricesByGlassAndDesign[`${glassKey}:${designKey}`]
+
+    if (!priceRule) {
+      return lookup
+    }
+
+    lookup.set(priceKey, {
+      id: priceRule.id ?? `${priceKey}:${glassKey}:${designKey}`,
+      price_key: priceKey,
+      price_1: priceRule.price_1,
+      price_2: priceRule.price_2,
+      price_4: priceRule.price_4,
+      created_at: priceRule.updated_at ?? priceRule.created_at ?? null,
+    })
+
+    return lookup
+  }, new Map())
+
+  return Array.from(pricingRowsByKey.values())
+}
+
 export function formatClpPrice(value: number) {
   return `$${value.toLocaleString('es-CL')}`
 }
@@ -108,6 +234,32 @@ function formatCollectionFallback(priceKey: string) {
   }
 
   return collectionToken.charAt(0).toUpperCase() + collectionToken.slice(1)
+}
+
+function formatGlassTypeFallback(priceKey: string) {
+  const glassType = getProductGlassType({ price_key: priceKey })
+
+  if (glassType) {
+    return `Copa ${glassType.label.toLocaleLowerCase('es')}`
+  }
+
+  return 'Copa'
+}
+
+function createPricingSummaryEntryId(collectionLabel: string, glassTypeLabel: string) {
+  return [normalizePricingToken(collectionLabel), normalizePricingToken(glassTypeLabel)]
+    .filter(Boolean)
+    .join(':')
+}
+
+function comparePricingSummaryEntries(
+  left: PricingSummaryEntry,
+  right: PricingSummaryEntry
+) {
+  return (
+    left.collectionLabel.localeCompare(right.collectionLabel, 'es', { sensitivity: 'base' }) ||
+    left.glassTypeLabel.localeCompare(right.glassTypeLabel, 'es', { sensitivity: 'base' })
+  )
 }
 
 function toRomanNumeral(value: number) {
@@ -153,17 +305,32 @@ export function buildPricingSummaryGroups(
   products: Product[]
 ): PricingSummaryGroup[] {
   const activePricingRows = getMostRecentPricingRows(pricingRows)
-  const collectionLabelsByKey = products.reduce<Record<string, string>>((lookup, product) => {
-    const pricingKey = resolveProductPriceKey(product)
-    const collectionLabel = product.collection?.trim()
+  const summaryEntriesByKey = products.reduce<Record<string, Map<string, PricingSummaryEntry>>>(
+    (lookup, product) => {
+      const pricingKey = resolveProductPriceKey(product)
+      const collectionLabel = product.collection?.trim() || null
 
-    if (!pricingKey || isPackOnlyProduct(product)) {
+      if (!pricingKey || isPackOnlyProduct(product)) {
+        return lookup
+      }
+
+      const fallbackCollectionLabel = formatCollectionFallback(pricingKey)
+      const glassType = getProductGlassType(product)
+      const entry: PricingSummaryEntry = {
+        collectionLabel: collectionLabel || fallbackCollectionLabel,
+        glassTypeLabel: glassType
+          ? `Copa ${glassType.label.toLocaleLowerCase('es')}`
+          : formatGlassTypeFallback(pricingKey),
+        id: '',
+      }
+
+      entry.id = createPricingSummaryEntryId(entry.collectionLabel, entry.glassTypeLabel)
+      lookup[pricingKey] ??= new Map<string, PricingSummaryEntry>()
+      lookup[pricingKey].set(entry.id, entry)
       return lookup
-    }
-
-    lookup[pricingKey] = collectionLabel || formatCollectionFallback(pricingKey)
-    return lookup
-  }, {})
+    },
+    {}
+  )
 
   const groups = activePricingRows.reduce<
     Map<
@@ -174,6 +341,7 @@ export function buildPricingSummaryGroups(
         price_2: number | null
         price_4: number | null
         collectionLabels: Set<string>
+        entries: Map<string, PricingSummaryEntry>
         priceKeys: Set<string>
       }
     >
@@ -193,12 +361,29 @@ export function buildPricingSummaryGroups(
         price_2: pricingRow.price_2,
         price_4: pricingRow.price_4,
         collectionLabels: new Set<string>(),
+        entries: new Map<string, PricingSummaryEntry>(),
         priceKeys: new Set<string>(),
       }
 
-    group.collectionLabels.add(
-      collectionLabelsByKey[pricingKey] ?? formatCollectionFallback(pricingKey)
-    )
+    const summaryEntries = summaryEntriesByKey[pricingKey]
+
+    if (summaryEntries?.size) {
+      summaryEntries.forEach((entry) => {
+        group.collectionLabels.add(entry.collectionLabel)
+        group.entries.set(entry.id, entry)
+      })
+    } else {
+      const entry: PricingSummaryEntry = {
+        collectionLabel: formatCollectionFallback(pricingKey),
+        glassTypeLabel: formatGlassTypeFallback(pricingKey),
+        id: '',
+      }
+
+      entry.id = createPricingSummaryEntryId(entry.collectionLabel, entry.glassTypeLabel)
+      group.collectionLabels.add(entry.collectionLabel)
+      group.entries.set(entry.id, entry)
+    }
+
     group.priceKeys.add(pricingKey)
     lookup.set(groupId, group)
     return lookup
@@ -221,6 +406,7 @@ export function buildPricingSummaryGroups(
       collectionLabels: Array.from(group.collectionLabels).sort((left, right) =>
         left.localeCompare(right, 'es')
       ),
+      entries: Array.from(group.entries.values()).sort(comparePricingSummaryEntries),
       priceKeys: Array.from(group.priceKeys).sort((left, right) =>
         left.localeCompare(right, 'es')
       ),

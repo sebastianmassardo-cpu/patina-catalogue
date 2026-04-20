@@ -16,6 +16,7 @@ import {
   type PricingLookup,
   type PricingSummaryGroup,
 } from '../pricing-config'
+import { PricingSeriesPairings } from './pricing-series-pairings'
 
 const ALL_COLLECTIONS_ID = '__all__'
 const ALL_COLLECTIONS_LABEL = 'Todas'
@@ -259,9 +260,9 @@ function PackPricingMenu({ groups }: { groups: PricingSummaryGroup[] }) {
   return (
     <div className="rounded-[1.7rem] border border-[#E8DED6] bg-[linear-gradient(180deg,rgba(255,255,255,0.6),rgba(247,244,240,0.92))] px-4 py-4 shadow-[0_14px_30px_rgba(22,63,44,0.04)] md:px-5 md:py-5">
       <div className="max-w-xl">
-        <p className="text-[8px] uppercase tracking-[0.28em] text-[#7A857E]">Menú de packs</p>
+        <p className="text-[8px] uppercase tracking-[0.28em] text-[#7A857E]">Series de packs</p>
         <p className="mt-2 font-serif text-[1.08rem] leading-[1.16] tracking-[-0.03em] text-[#163F2C] md:text-[1.18rem]">
-          Colecciones y packs.
+          Precio según colección y tipo de copa.
         </p>
       </div>
 
@@ -316,16 +317,7 @@ function PackPricingMenu({ groups }: { groups: PricingSummaryGroup[] }) {
                 ))}
               </div>
 
-              <div className="mt-4 flex flex-wrap gap-2">
-                {group.collectionLabels.map((collectionLabel) => (
-                  <span
-                    key={collectionLabel}
-                    className="rounded-full border border-[#E9E0D8] bg-white/42 px-3 py-1.5 text-[10px] tracking-[0.02em] text-[#5C6962]"
-                  >
-                    {formatCollectionLabel(collectionLabel)}
-                  </span>
-                ))}
-              </div>
+              <PricingSeriesPairings compact entries={group.entries} />
             </article>
           )
         })}

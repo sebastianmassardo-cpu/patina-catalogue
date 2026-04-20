@@ -1,4 +1,4 @@
-import { formatCollectionLabel } from '../catalogue-display'
+import { PricingSeriesPairings } from './pricing-series-pairings'
 import { formatClpPrice, type PricingSummaryGroup } from '../pricing-config'
 
 type PricingSummaryProps = {
@@ -29,10 +29,13 @@ export function PricingSummary({ groups }: PricingSummaryProps) {
                 Precios por formato
               </p>
               <h2 className="mt-3 max-w-xl font-serif text-[1.6rem] leading-[1.12] tracking-[-0.03em] text-[#163F2C] md:text-[2.02rem]">
-                Colecciones combinables por grupo de precio.
+                Series por colección y tipo de copa.
               </h2>
             </div>
 
+            <p className="max-w-md text-[13px] leading-6 text-[#617067] lg:justify-self-end">
+              Cada serie reúne las combinaciones que comparten el mismo precio para packs.
+            </p>
           </div>
 
           <div className="mt-8 grid gap-5 lg:grid-cols-2 xl:grid-cols-3">
@@ -86,21 +89,7 @@ export function PricingSummary({ groups }: PricingSummaryProps) {
                     ))}
                   </div>
 
-                  <div className="mt-4">
-                    <p className="text-[8px] uppercase tracking-[0.28em] text-[#8E9791]">
-                      Colecciones
-                    </p>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {group.collectionLabels.map((collectionLabel) => (
-                        <span
-                          key={collectionLabel}
-                          className="rounded-full border border-[#E9E0D8] bg-white/35 px-3 py-1.5 text-[10.5px] tracking-[0.02em] text-[#5C6962]"
-                        >
-                          {formatCollectionLabel(collectionLabel)}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
+                  <PricingSeriesPairings entries={group.entries} />
                 </article>
               )
             })}
