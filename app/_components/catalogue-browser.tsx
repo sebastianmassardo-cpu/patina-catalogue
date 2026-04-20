@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { startTransition, useState } from 'react'
+import { startTransition, useState, type ReactNode } from 'react'
 import {
   formatCollectionLabel,
   formatProductDescription,
@@ -87,6 +87,14 @@ function FilterChip({ isActive, label, onClick }: FilterChipProps) {
     >
       {label}
     </button>
+  )
+}
+
+function FilterRail({ children }: { children: ReactNode }) {
+  return (
+    <div className="-mx-4 mt-3 max-w-[calc(100%+2rem)] overflow-x-auto overscroll-x-contain px-4 pb-2 [-ms-overflow-style:none] [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-0 md:max-w-none md:overflow-visible md:px-0 md:pb-0">
+      <div className="flex w-max min-w-full gap-2 md:w-auto md:flex-wrap">{children}</div>
+    </div>
   )
 }
 
@@ -495,13 +503,13 @@ export function CatalogueBrowser({
                   <PackPricingMenu groups={packPricingGroups} />
                 ) : null}
 
-                <div className="grid gap-5 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)_minmax(0,0.8fr)]">
-                  <div>
+                <div className="grid min-w-0 gap-5 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)_minmax(0,0.8fr)]">
+                  <div className="min-w-0">
                     <p className="text-[9px] uppercase tracking-[0.28em] text-[#8A948E]">
                       Colección
                     </p>
 
-                    <div className="-mx-1 mt-3 flex gap-2 overflow-x-auto px-1 pb-1 md:mx-0 md:flex-wrap md:overflow-visible md:px-0 md:pb-0">
+                    <FilterRail>
                       {collections.map((collection) => (
                         <FilterChip
                           key={collection.id}
@@ -514,15 +522,15 @@ export function CatalogueBrowser({
                           }}
                         />
                       ))}
-                    </div>
+                    </FilterRail>
                   </div>
 
-                  <div>
+                  <div className="min-w-0">
                     <p className="text-[9px] uppercase tracking-[0.28em] text-[#8A948E]">
                       Tipo de copa
                     </p>
 
-                    <div className="-mx-1 mt-3 flex gap-2 overflow-x-auto px-1 pb-1 md:mx-0 md:flex-wrap md:overflow-visible md:px-0 md:pb-0">
+                    <FilterRail>
                       {glassTypeFilterOptions.map((glassType) => (
                         <FilterChip
                           key={glassType.id}
@@ -535,15 +543,15 @@ export function CatalogueBrowser({
                           }}
                         />
                       ))}
-                    </div>
+                    </FilterRail>
                   </div>
 
-                  <div>
+                  <div className="min-w-0">
                     <p className="text-[9px] uppercase tracking-[0.28em] text-[#8A948E]">
                       Precio
                     </p>
 
-                    <div className="-mx-1 mt-3 flex gap-2 overflow-x-auto px-1 pb-1 md:mx-0 md:flex-wrap md:overflow-visible md:px-0 md:pb-0">
+                    <FilterRail>
                       {priceFilterOptions.map((priceFilter) => (
                         <FilterChip
                           key={priceFilter.id}
@@ -556,7 +564,7 @@ export function CatalogueBrowser({
                           }}
                         />
                       ))}
-                    </div>
+                    </FilterRail>
                   </div>
                 </div>
 
